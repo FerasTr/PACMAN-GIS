@@ -1,0 +1,111 @@
+package GameObjects;
+
+import FileHandling.ReadCSV;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+public class Game implements Set<GameElement>
+{
+    private Set<GameElement> objects;
+
+    public Game()
+    {
+        objects = new LinkedHashSet<GameElement>();
+    }
+
+    public Game(String csv_file)
+    {
+        objects = ReadCSV.parsing(csv_file);
+    }
+
+    @Override
+    public int size()
+    {
+        return this.objects.size();
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return this.objects.isEmpty();
+    }
+
+    @Override
+    public boolean contains(Object o)
+    {
+        return this.objects.contains(o);
+    }
+
+    @Override
+    public Iterator<GameElement> iterator()
+    {
+        return this.objects.iterator();
+    }
+
+    @Override
+    public Object[] toArray()
+    {
+        return this.objects.toArray();
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a)
+    {
+        return this.objects.toArray(a);
+    }
+
+    @Override
+    public boolean add(GameElement gameElement)
+    {
+        return this.objects.add(gameElement);
+    }
+
+    @Override
+    public boolean remove(Object o)
+    {
+        return this.objects.remove(o);
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c)
+    {
+        return this.objects.containsAll(c);
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends GameElement> c)
+    {
+        return this.objects.addAll(c);
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c)
+    {
+        return this.objects.retainAll(c);
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c)
+    {
+        return this.objects.removeAll(c);
+    }
+
+    @Override
+    public void clear()
+    {
+        this.objects.clear();
+    }
+
+    public String toString()
+    {
+        String toPrint = "";
+        for (GameElement element : objects)
+        {
+            toPrint += element.toString() + '\n';
+        }
+        return toPrint;
+    }
+}

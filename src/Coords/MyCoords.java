@@ -6,19 +6,22 @@ import Geom.Point3D;
  * This class implements coords_converter interface, it is used for basic calculations on points.
  */
 
-public class MyCoords implements coords_converter
+public final class MyCoords
 {
     public final static double EARTH_RADIUS = 6371000;
+
+    private MyCoords()
+    {
+    }
 
     /**
      * Will convert to degree then add the points.
      *
-     * @param gps                   Point in degree as used in GIS.
+     * @param gps                   Point in degree as used in GameObjects.
      * @param local_vector_in_meter vector used for calculations.
      * @return new gps point after transformation.
      */
-    @Override
-    public Point3D add(Point3D gps, Point3D local_vector_in_meter)
+    public static Point3D add(Point3D gps, Point3D local_vector_in_meter)
     {
         // Longitude normal:
         double longitude_normal = Math.cos(Math.toRadians(gps.x()));
@@ -44,8 +47,8 @@ public class MyCoords implements coords_converter
      * @param gps1 point 2 in degree
      * @return the distance in meters between the two points
      */
-    @Override
-    public double distance3d(Point3D gps0, Point3D gps1)
+
+    public static double distance3d(Point3D gps0, Point3D gps1)
     {
         // Using the built-in 3D distance function from Point3D:
         Point3D distance_3d = vector3D(gps0, gps1);
@@ -60,8 +63,8 @@ public class MyCoords implements coords_converter
      * @param gps1 point 2 in degree
      * @return new point which represents the vector,
      */
-    @Override
-    public Point3D vector3D(Point3D gps0, Point3D gps1)
+
+    public static Point3D vector3D(Point3D gps0, Point3D gps1)
     {
         // Longitude normal:
         double longitude_normal = Math.cos(Math.toRadians(gps0.x()));
@@ -87,8 +90,8 @@ public class MyCoords implements coords_converter
      * @param gps1 point 2 in degree
      * @return array of size 3 which holds the values.
      */
-    @Override
-    public double[] azimuth_elevation_dist(Point3D gps0, Point3D gps1)
+
+    public static double[] azimuth_elevation_dist(Point3D gps0, Point3D gps1)
     {
         // Building array [YAW, PITCH, DISTANCE]
         double[] yaw_pitch_dist = new double[3];
@@ -116,8 +119,8 @@ public class MyCoords implements coords_converter
      * @param p point in degree to be checked
      * @return true if valid, false otherwise.
      */
-    @Override
-    public boolean isValid_GPS_Point(Point3D p)
+
+    public static boolean isValid_GPS_Point(Point3D p)
     {
         // Checking the following : Latitude = [-180,+180], Longitude = [-90,+90], Latitude = [-450, +inf]
         if (p.x() >= -180 && p.x() <= 180)
