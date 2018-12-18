@@ -1,26 +1,24 @@
 package MyFrame;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import GameObjects.Game;
+import GameObjects.Map;
+import GameObjects.MapInit;
 
-import javax.imageio.ImageIO;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import java.awt.BorderLayout;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import javax.swing.*;
 
 public class MyFrame extends JFrame
 {
+    Map playground;
+    Game currentGame;
+    PlayGroundBoard bg;
+
     private JMenuBar optionsBar = new JMenuBar();
 
-    private JMenu gameOptions = new JMenu("GameObjects");
+    private JMenu gameOptions = new JMenu("Options");
     private JMenuItem gameOpen = new JMenuItem("Open");
     private JMenuItem gameSave = new JMenuItem("Save");
     private JMenuItem gameClear = new JMenuItem("Clear");
@@ -30,12 +28,70 @@ public class MyFrame extends JFrame
     private JMenuItem insertFruit = new JMenuItem("Fruit");
     private JMenuItem gameRun = new JMenuItem("Run");
 
-    public MyFrame()
+    public MyFrame(Map playground)
     {
+        this.playground = playground;
+
+
+        bg = new PlayGroundBoard(playground);
 
         setSize(1433, 642);
         setMinimumSize(new Dimension(300, 100));
 
+        insertPacman.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                bg.addPacman();
+            }
+        });
+
+        insertFruit.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                bg.addFruit();
+            }
+        });
+
+        gameOpen.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                File selectedFile = null;
+                JFileChooser fileChooser = new JFileChooser("./Resources/CSV");
+                int result = fileChooser.showOpenDialog(null);
+                if (result == JFileChooser.APPROVE_OPTION)
+                {
+                    selectedFile = fileChooser.getSelectedFile();
+                    System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+                }
+                loadGameCSV(selectedFile);
+                bg.loadGame(currentGame);
+            }
+        });
+
+        gameSave.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                currentGame = bg.getGameSettings();
+                saveGameCSV(currentGame);
+            }
+        });
+
+        gameClear.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                clearGame();
+            }
+        });
         optionsBar.add(gameOptions);
 
         gameOptions.add(gameRun);
@@ -43,72 +99,35 @@ public class MyFrame extends JFrame
         gameOptions.add(gameSave);
         gameOptions.add(gameClear);
 
-        this.add(new DrawingSurface());
+
+        this.add(bg);
         getContentPane().add(optionsBar, BorderLayout.NORTH);
         optionsBar.add(gameInsert);
         gameInsert.add(insertPacman);
         gameInsert.add(insertFruit);
 
-
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+    }
+
+    private void clearGame()
+    {
+        bg.clearBoard();
+    }
+
+    private void saveGameCSV(Game currentGame)
+    {
+        currentGame.saveToCSV();
+    }
+
+    private void loadGameCSV(File selectedFile)
+    {
+        currentGame = new Game(selectedFile);
+
     }
 
     public static void main(String[] args)
     {
-        MyFrame asd = new MyFrame();
+        MyFrame asd = new MyFrame(MapInit.ArielMap());
     }
-
-    class DrawingSurface extends JComponent implements MouseListener
-    {
-        public DrawingSurface(){
-            addMouseListener(this);
-        }
-        public void paintComponent(Graphics g)
-        {
-            super.paintComponent(g);
-            BufferedImage myImage = null;
-            try
-            {
-                myImage = ImageIO.read(new File("C:\\MyProjects\\GitRepo\\PACMAN-GIS\\Resources\\maps\\Ariel1.png"));
-            }
-            catch (IOException e)
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            g.drawImage(myImage, 0, 0, this.getWidth(), this.getHeight(), this);
-
-        }
-
-        @Override
-        public void mouseClicked(MouseEvent e)
-        {
-            System.out.println(e.getX() + "," + e.getY());
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e)
-        {
-
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e)
-        {
-
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e)
-        {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e)
-        {
-
-        }
-    }
-
 }

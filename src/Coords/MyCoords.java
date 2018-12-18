@@ -122,7 +122,7 @@ public final class MyCoords
 
     public static boolean isValid_GPS_Point(Point3D p)
     {
-        // Checking the following : Latitude = [-180,+180], Longitude = [-90,+90], Latitude = [-450, +inf]
+        // Checking the following : Latitude = [-180,+180], Longitude = [-90,+90], Altitude = [-450, +inf]
         if (p.x() >= -180 && p.x() <= 180)
         {
             if (p.y() >= -90 && p.y() <= 90)
@@ -137,5 +137,9 @@ public final class MyCoords
         return false;
     }
 
-
+    public static Point3D midGPS(Point3D point1, Point3D point2)
+    {
+        Point3D vector = vector3D(point1, point2);
+        return add(point1, vector);
+    }
 }

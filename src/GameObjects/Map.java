@@ -1,6 +1,7 @@
 package GameObjects;
 
 
+import Coords.MyCoords;
 import Geom.Point3D;
 
 import java.awt.image.BufferedImage;
@@ -8,34 +9,55 @@ import java.awt.image.BufferedImage;
 public class Map
 {
     private BufferedImage map_path;
-    double top_right_x;
-    double top_right_y;
-    double bot_left_x;
-    double bot_left_y;
+    private Range mapRange;
 
-    public Map(BufferedImage base, double top_right_x, double top_right_y, double bot_left_x, double bot_left_y)
+    public Map(BufferedImage base, Range mapRange)
     {
-        this.map_path = base;
-        this.top_right_x = top_right_x;
-        this.top_right_y = top_right_y;
-        this.top_right_x = bot_left_x;
-        this.top_right_y = bot_left_y;
+        map_path = base;
+        this.mapRange = mapRange;
+
     }
 
-    public Point3D pixleToGPS(Point3D pixle, double width, double height)
+    public Point3D pixleToGPS(Point3D pixelPoint)
     {
-        Point3D point_in_gps = new Point3D(0, 0, 0);
-        return point_in_gps;
+        double realW = pixelPoint.x() / map_path.getWidth();
+        double realH = pixelPoint.y() / map_path.getHeight();
+
+        double deltaX = mapRange.getDeltaX();
+        double deltaY = mapRange.getMidDeltaY();
+
+        double x = mapRange.getTopX() - (realH * deltaX);
+        double y = mapRange.getLeftMid().y() + (realW * deltaY);
+
+        return new Point3D(x, y, 0);
     }
 
-    public Point3D gpsToPixle(Point3D gps, double width, double height)
+    public Point3D gpsToPixle(Point3D gpsPoint)
     {
-        Point3D point_in_gps = new Point3D(0, 0, 0);
-        return point_in_gps;
+        double rel_x = mapRange.getTopX() - gpsPoint.x();
+        double rel_y = gpsPoint.y() - mapRange.getLeftMid().y();
+
+        double deltaX = mapRange.getDeltaX();
+        double deltaY = mapRange.getMidDeltaY();
+
+        double realW = rel_x / deltaX;
+        double realH = rel_y / deltaY;
+
+        int lat = (int) (realH * map_path.getWidth());
+        int lon = (int) (realW * map_path.getHeight());
+
+        return new Point3D(lat, lon, 0);
     }
 
-    public double distBetweenPixles()
+    public double distBetweenPixles(Point3D pixle1, Point3D pixle2)
     {
-        return 0;
+        Point3D pixle1ToGPS = pixleToGPS(pixle1);
+        Point3D pixle2ToGPS = pixleToGPS(pixle2);
+        return MyCoords.distance3d(pixle1ToGPS, pixle2ToGPS);
+    }
+
+    public BufferedImage getMapPath()
+    {
+        return map_path;
     }
 }

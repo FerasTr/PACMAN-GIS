@@ -3,6 +3,7 @@ package GameObjects;
 import Coords.MyCoords;
 import Geom.Point3D;
 
+import java.awt.Color;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -11,6 +12,7 @@ import java.util.Set;
 public class Path implements Set<Point3D>
 {
     private Set<Point3D> path_in_points;
+    private Color color;
 
     public Path()
     {
@@ -34,6 +36,11 @@ public class Path implements Set<Point3D>
         }
 
         return length;
+    }
+
+    public void setColor(Color pathColor)
+    {
+        this.color = pathColor;
     }
 
     @Override

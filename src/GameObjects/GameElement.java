@@ -1,12 +1,17 @@
 package GameObjects;
 
-import Geom.Geom_element;
+import Geom.Point3D;
+
+import java.awt.image.BufferedImage;
+
 
 public interface GameElement
 {
-    public Geom_element getLocation();
+    public Point3D getLocation();
 
     public Meta_data getData();
 
     public String toString();
+
+    public BufferedImage getIcon();
 }

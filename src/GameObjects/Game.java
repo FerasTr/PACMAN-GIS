@@ -1,11 +1,10 @@
 package GameObjects;
 
 import FileHandling.ReadCSV;
+import FileHandling.WriteCSV;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.io.File;
+import java.util.*;
 
 public class Game implements Set<GameElement>
 {
@@ -21,10 +20,84 @@ public class Game implements Set<GameElement>
         objects = ReadCSV.parsing(csv_file);
     }
 
+    public Game(File csv_file)
+    {
+        objects = ReadCSV.parsing(csv_file.getAbsolutePath());
+    }
+
+    public void saveToCSV()
+    {
+        WriteCSV.WriteToCSV(this);
+    }
+
     @Override
     public int size()
     {
         return this.objects.size();
+    }
+
+    public int sizePacman()
+    {
+        int numPacman = 0;
+        Iterator<GameElement> itr = this.iterator();
+        while (itr.hasNext())
+        {
+            GameElement gameElement = itr.next();
+            if (gameElement instanceof PacMan)
+            {
+                numPacman++;
+            }
+        }
+
+        return numPacman;
+    }
+
+    public int sizeFruit()
+    {
+        int numFruit = 0;
+        Iterator<GameElement> itr = this.iterator();
+        while (itr.hasNext())
+        {
+            GameElement gameElement = itr.next();
+            if (gameElement instanceof Fruit)
+            {
+                numFruit++;
+            }
+        }
+
+        return numFruit;
+    }
+
+    public ArrayList<PacMan> listPacman()
+    {
+        ArrayList<PacMan> pacman = new ArrayList();
+        Iterator<GameElement> itr = this.iterator();
+        while (itr.hasNext())
+        {
+            GameElement gameElement = itr.next();
+            if (gameElement instanceof PacMan)
+            {
+                pacman.add((PacMan) gameElement);
+            }
+        }
+
+        return pacman;
+    }
+
+    public ArrayList<Fruit> listFruit()
+    {
+        ArrayList<Fruit> fruit = new ArrayList();
+        Iterator<GameElement> itr = this.iterator();
+        while (itr.hasNext())
+        {
+            GameElement gameElement = itr.next();
+            if (gameElement instanceof Fruit)
+            {
+                fruit.add((Fruit) gameElement);
+            }
+        }
+
+        return fruit;
     }
 
     @Override
