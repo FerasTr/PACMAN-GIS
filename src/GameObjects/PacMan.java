@@ -27,7 +27,6 @@ public class PacMan implements GameElement
         this.speed = speed;
         this.radius = radius;
         path = new Path(ID);
-        path.addPointToPath(this.location);
     }
 
     public PacMan(String id, String lat, String lon, String alt, String speed, String radius)
@@ -38,7 +37,6 @@ public class PacMan implements GameElement
         this.speed = Double.parseDouble(speed);
         this.radius = Double.parseDouble(radius);
         path = new Path(ID);
-        path.addPointToPath(this.location);
     }
 
     public PacMan(PacMan n)

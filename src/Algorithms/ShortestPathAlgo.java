@@ -110,24 +110,36 @@ final public class ShortestPathAlgo
     {
         ArrayList<Fruit> targets = game.listFruit();
         ArrayList<PacMan> players = game.listPacman();
-        double bestTime;
-        while (!targets.isEmpty())
+        Iterator<Fruit> itr = targets.iterator();
+        while (itr.hasNext())
         {
-            bestTime = Integer.MAX_VALUE;
+            Fruit currentTarget = itr.next();
 
-            for (Fruit currentTarget : targets)
+            PacMan close = fastestToEat(currentTarget, players);
+            double timeToEatClose = calcTimeToEat(close, currentTarget);
+            for (PacMan canidate : players)
             {
-                PacMan close = fastestToEat(currentTarget, players);
-                double timeToEatClose = calcTimeToEat(close, currentTarget);
-                for(PacMan canidate: players)
+                double timeToEatCanidate = calcTimeToEat(canidate, currentTarget);
+                if (timeToEatCanidate < timeToEatClose)
                 {
-                    double timeToEatCanidate = calcTimeToEat(canidate, currentTarget);
-                    if(timeToEatCanidate < timeToEatClose)
-                    {
-                        close = canidate;
-                    }
+                    close = canidate;
+                    timeToEatClose = timeToEatCanidate;
                 }
             }
+            Path p = close.getPath();
+            p.addPointToPath(close.getLocation());
+            p.setTimeForPath(timeToEatClose);
+            double steps = close.distanceToScore(currentTarget) / close.getSpeed();
+            System.out.println(steps);
+            for (int i = 0; i < steps; i++)
+            {
+                Point3D point = nextPointByRadius(close.getLocation(), currentTarget.getLocation(), close.getRadius());
+                p.addPointToPath(point);
+                close.updateLocation(point);
+                System.out.println("DEBUG " + point.toFile());
+            }
+            currentTarget.setEaten();
+            itr.remove();
         }
     }
 
@@ -137,7 +149,6 @@ final public class ShortestPathAlgo
         Point3D closeLocation = close.getLocation();
         double speed = close.getSpeed();
         double radius = close.getRadius();
-        double distance = close.distanceToScore(currentTarget);
         Point3D current = MyCoords.vector3D(closeLocation, fruitLocation);
         double currentLength = current.distance3D(0, 0, 0);
         if (currentLength <= radius)

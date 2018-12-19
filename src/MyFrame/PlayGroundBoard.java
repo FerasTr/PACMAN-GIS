@@ -128,6 +128,7 @@ public class PlayGroundBoard extends JPanel
             front = m.gpsToPixle(front);
             front = pointAfterResize(front);
             Point3D back = pointsPaths.get(i - 1);
+            System.out.println("POINT IN PATH " + back.toFile());
             back = m.gpsToPixle(back);
             back = pointAfterResize(back);
 
