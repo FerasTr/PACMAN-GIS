@@ -12,9 +12,11 @@ public class PacMan implements GameElement
 {
     private static int ID = -1;
 
-
     private Point3D location;
     private Metadata information;
+
+    private Path path;
+
 
     public PacMan(double lat, double lon, double alt, double speed, double radius)
     {
@@ -22,6 +24,7 @@ public class PacMan implements GameElement
         this.location = new Point3D(location_string);
         ID++;
         this.information = new Metadata("P", String.valueOf(ID), String.valueOf(speed), String.valueOf(radius));
+        path = new Path(ID);
     }
 
     public PacMan(String id, String lat, String lon, String alt, String speed, String radius)
@@ -30,6 +33,7 @@ public class PacMan implements GameElement
         this.location = new Point3D(location_string);
         ID = Integer.parseInt(id);
         this.information = new Metadata("P", String.valueOf(ID), speed, radius);
+        path = new Path(ID);
     }
 
     @Override
@@ -39,7 +43,7 @@ public class PacMan implements GameElement
     }
 
     @Override
-    public Meta_data getData()
+    public Metadata getData()
     {
         return this.information;
     }
@@ -75,7 +79,8 @@ public class PacMan implements GameElement
 
     public double distanceToScore(Fruit target)
     {
-        double distance = MyCoords.distance3d(this.location, target.getLocation());
+        double radius = Double.parseDouble(this.information.getRadius());
+        double distance = (MyCoords.distance3d(this.location, target.getLocation()) - radius);
         if (distance <= 0)
         {
             return -1;
@@ -83,4 +88,18 @@ public class PacMan implements GameElement
         return distance;
     }
 
+    public Path getPath()
+    {
+        return path;
+    }
+
+    public void setPath(Path yourPath)
+    {
+        path = yourPath;
+    }
+
+    public void updateLocation(Point3D location)
+    {
+        this.location = location;
+    }
 }

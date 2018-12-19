@@ -25,6 +25,11 @@ public class Game implements Set<GameElement>
         objects = ReadCSV.parsing(csv_file.getAbsolutePath());
     }
 
+    public Game(Game game)
+    {
+        this.objects = new LinkedHashSet<>(game.objects);
+    }
+
     public void saveToCSV()
     {
         WriteCSV.WriteToCSV(this);

@@ -15,6 +15,8 @@ public class Fruit implements GameElement
     private Point3D location;
     private Metadata information;
 
+    boolean NotEaten = true;
+
     public Fruit(double lat, double lon, double alt, double weight)
     {
         String location_string = "(" + lat + "," + lon + "," + alt + ")";
@@ -38,7 +40,7 @@ public class Fruit implements GameElement
     }
 
     @Override
-    public Meta_data getData()
+    public Metadata getData()
     {
         return this.information;
     }
@@ -69,5 +71,15 @@ public class Fruit implements GameElement
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void setEaten()
+    {
+        NotEaten = false;
+    }
+
+    public boolean isNotEaten()
+    {
+        return NotEaten;
     }
 }

@@ -1,5 +1,6 @@
 package MyFrame;
 
+import Algorithms.ShortestPathAlgo;
 import GameObjects.Game;
 import GameObjects.Map;
 import GameObjects.MapInit;
@@ -92,6 +93,15 @@ public class MyFrame extends JFrame
                 clearGame();
             }
         });
+
+        gameRun.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                runAlg();
+            }
+        });
         optionsBar.add(gameOptions);
 
         gameOptions.add(gameRun);
@@ -108,6 +118,11 @@ public class MyFrame extends JFrame
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+    }
+
+    private void runAlg()
+    {
+        bg.runGame();
     }
 
     private void clearGame()

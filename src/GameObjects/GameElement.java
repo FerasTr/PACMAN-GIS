@@ -9,7 +9,7 @@ public interface GameElement
 {
     public Point3D getLocation();
 
-    public Meta_data getData();
+    public Metadata getData();
 
     public String toString();
 

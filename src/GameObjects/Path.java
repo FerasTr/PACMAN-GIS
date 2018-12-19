@@ -4,19 +4,30 @@ import Coords.MyCoords;
 import Geom.Point3D;
 
 import java.awt.Color;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
-public class Path implements Set<Point3D>
+public class Path
 {
-    private Set<Point3D> path_in_points;
+    private ArrayList<Point3D> path_in_points;
     private Color color;
+    private double timeToComplete = 0;
 
-    public Path()
+    int parentID;
+
+    public Path(int ID)
     {
-        path_in_points = new LinkedHashSet<Point3D>();
+        path_in_points = new ArrayList<Point3D>();
+        color = randomColor();
+        parentID = ID;
+    }
+
+    private Color randomColor()
+    {
+        Random rand = new Random();
+        float r = rand.nextFloat();
+        float g = rand.nextFloat();
+        float b = rand.nextFloat();
+        return new Color(r, g, b);
     }
 
     public double length()
@@ -26,7 +37,7 @@ public class Path implements Set<Point3D>
         {
             return 0;
         }
-        Iterator<Point3D> iter = this.iterator();
+        Iterator<Point3D> iter = this.path_in_points.iterator();
         Point3D currentPoint = iter.next();
         while (iter.hasNext())
         {
@@ -38,88 +49,11 @@ public class Path implements Set<Point3D>
         return length;
     }
 
-    public void setColor(Color pathColor)
+    public Color getColor()
     {
-        this.color = pathColor;
+        return color;
     }
 
-    @Override
-    public int size()
-    {
-        return this.path_in_points.size();
-    }
-
-    @Override
-    public boolean isEmpty()
-    {
-        return this.path_in_points.isEmpty();
-    }
-
-    @Override
-    public boolean contains(Object o)
-    {
-        return this.path_in_points.contains(o);
-    }
-
-    @Override
-    public Iterator<Point3D> iterator()
-    {
-        return this.path_in_points.iterator();
-    }
-
-    @Override
-    public Object[] toArray()
-    {
-        return this.path_in_points.toArray();
-    }
-
-    @Override
-    public <T> T[] toArray(T[] a)
-    {
-        return this.path_in_points.toArray(a);
-    }
-
-    @Override
-    public boolean add(Point3D Point3D)
-    {
-        return this.path_in_points.add(Point3D);
-    }
-
-    @Override
-    public boolean remove(Object o)
-    {
-        return this.path_in_points.remove(o);
-    }
-
-    @Override
-    public boolean containsAll(Collection<?> c)
-    {
-        return this.path_in_points.containsAll(c);
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends Point3D> c)
-    {
-        return this.path_in_points.addAll(c);
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c)
-    {
-        return this.path_in_points.retainAll(c);
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c)
-    {
-        return this.path_in_points.removeAll(c);
-    }
-
-    @Override
-    public void clear()
-    {
-        this.path_in_points.clear();
-    }
 
     public String toString()
     {
@@ -128,6 +62,16 @@ public class Path implements Set<Point3D>
         {
             toPrint += point.toFile() + '\n';
         }
-        return toPrint;
+        return toPrint + " time: " + timeToComplete;
     }
+
+    public void setTimeForPath(double time)
+    {
+        timeToComplete += time;
+    }
+    public ArrayList<Point3D> getPathList()
+    {
+        return path_in_points;
+    }
+
 }

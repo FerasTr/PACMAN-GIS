@@ -68,22 +68,26 @@ public class Range
         return top_left.y() - bot_right.y();
     }
 
-    public double getMidDeltaY()
+    public double getMidDeltaY(double relative)
     {
-        Point3D gpsLeft = getLeftMid();
-        Point3D gpsRight = getRightMid();
+        Point3D gpsLeft = getLeftMid(relative);
+        Point3D gpsRight = getRightMid(relative);
         return gpsRight.y() - gpsLeft.y();
 
     }
 
-    public Point3D getLeftMid()
+    public Point3D getLeftMid(double relative)
     {
-        return MyCoords.midGPS(top_left, bot_left);
+        return MyCoords.midGPS(relative, top_left, bot_left);
 
     }
 
-    public Point3D getRightMid()
+    public Point3D getRightMid(double relative)
     {
-        return MyCoords.midGPS(top_right, bot_right);
+        return MyCoords.midGPS(relative, top_right, bot_right);
+    }
+
+    public double getPixelGPSDelta(Point3D pointInPixel){
+        return top_left.x() - pointInPixel.x();
     }
 }

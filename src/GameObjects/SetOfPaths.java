@@ -1,17 +1,14 @@
 package GameObjects;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 public class SetOfPaths implements Set<Path>
 {
-    LinkedList<Path> pathForGame;
+    ArrayList<Path> pathForGame;
 
     public SetOfPaths()
     {
-        pathForGame = new LinkedList<>();
+        pathForGame = new ArrayList<>();
     }
 
     @Override

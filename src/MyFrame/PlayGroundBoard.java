@@ -1,5 +1,6 @@
 package MyFrame;
 
+import Algorithms.ShortestPathAlgo;
 import GameObjects.*;
 import Geom.Point3D;
 
@@ -8,6 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class PlayGroundBoard extends JPanel
@@ -75,6 +77,7 @@ public class PlayGroundBoard extends JPanel
     {
         super.paintComponent(g);
 
+
         g.drawImage(myImage, 0, 0, this.getWidth(), this.getHeight(), this);
 
         if (gameSettings != null)
@@ -92,6 +95,44 @@ public class PlayGroundBoard extends JPanel
                         (int) locationInPixel.y() - (icon.getHeight() / 2), this);
 
             }
+        }
+
+        ArrayList<PacMan> paclist = gameSettings.listPacman();
+        Iterator<PacMan> itr = paclist.iterator();
+        PacMan p;
+
+        while (itr.hasNext())
+        {
+            p = itr.next();
+
+
+            if (p.getPath() != null && !p.getPath().getPathList().isEmpty())
+            {
+                updateLines(g, p);
+            }
+        }
+    }
+
+    private void updateLines(Graphics g, PacMan p)
+    {
+        Graphics2D twoG = (Graphics2D) g;
+        Stroke line = new BasicStroke(5, 1, 1);
+        Path path = p.getPath();
+
+        twoG.setColor(path.getColor());
+        ArrayList<Point3D> pointsPaths = path.getPathList();
+
+        for (int i = 1; i < pointsPaths.size(); i++)
+        {
+            Point3D front = pointsPaths.get(i);
+            front = m.gpsToPixle(front);
+            front = pointAfterResize(front);
+            Point3D back = pointsPaths.get(i - 1);
+            back = m.gpsToPixle(back);
+            back = pointAfterResize(back);
+
+            twoG.setStroke(line);
+            twoG.drawLine(back.ix(), back.iy(), front.ix(), front.iy());
         }
     }
 
@@ -130,9 +171,10 @@ public class PlayGroundBoard extends JPanel
                 Point3D clickLocation = new Point3D(e.getX(), e.getY(), 0);
                 Point3D p = pointBeforeResize(clickLocation);
                 Point3D inGPS = m.pixleToGPS(p);
-                gameSettings.add(new PacMan(inGPS.x(), inGPS.y(), inGPS.z(), 1, 1));
+                PacMan toAdd = new PacMan(inGPS.x(), inGPS.y(), inGPS.z(), 1, 1);
+                gameSettings.add(toAdd);
                 repaint();
-                System.out.println("PACMAN ADDED --> PIXEL: [" + (int) p.x() + "," + (int) p.y() + "] GIS: [" + inGPS.x() + "," + inGPS.y() + "]");
+                System.out.println("PACMAN ADDED " + toAdd.getData().getId() + " --> PIXEL: [" + (int) p.x() + "," + (int) p.y() + "] GIS: [" + inGPS.x() + "," + inGPS.y() + "]");
             }
 
             @Override
@@ -178,9 +220,10 @@ public class PlayGroundBoard extends JPanel
                 Point3D clickLocation = new Point3D(e.getX(), e.getY(), 0);
                 Point3D p = pointBeforeResize(clickLocation);
                 Point3D inGPS = m.pixleToGPS(p);
-                gameSettings.add(new Fruit(inGPS.x(), inGPS.y(), inGPS.z(), 1));
+                Fruit toAdd = new Fruit(inGPS.x(), inGPS.y(), inGPS.z(), 1);
+                gameSettings.add(toAdd);
                 repaint();
-                System.out.println("FRUIT ADDED --> PIXEL: [" + (int) p.x() + "," + (int) p.y() + "] GIS: [" + inGPS.x() + "," + inGPS.y() + "]");
+                System.out.println("FRUIT ADDED " + toAdd.getData().getId() + " --> PIXEL: [" + (int) p.x() + "," + (int) p.y() + "] GIS: [" + inGPS.x() + "," + inGPS.y() + "]");
             }
 
             @Override
@@ -208,5 +251,23 @@ public class PlayGroundBoard extends JPanel
             }
         };
         this.addMouseListener(fruitMouse);
+    }
+
+    public void runGame()
+    {
+        ShortestPathAlgo.algorithm(gameSettings);
+        ArrayList<PacMan> asd = gameSettings.listPacman();
+        for (PacMan l : asd)
+        {
+            if (l.getPath().getPathList().isEmpty())
+            {
+                System.out.println("PACMAN ID: " + l.getData().getId() + " is still");
+            }
+            else
+            {
+                System.out.println("PACMAN ID: " + l.getData().getId() + " " + l.getPath().toString());
+            }
+        }
+        repaint();
     }
 }

@@ -137,9 +137,13 @@ public final class MyCoords
         return false;
     }
 
-    public static Point3D midGPS(Point3D point1, Point3D point2)
+    public static Point3D midGPS(double relative, Point3D point1, Point3D point2)
     {
         Point3D vector = vector3D(point1, point2);
-        return add(point1, vector);
+        double rel_x = relative * vector.x();
+        double rel_y = relative * vector.y();
+        double rel_z = relative * vector.z();
+        Point3D calcRelativ = new Point3D(rel_x, rel_y, rel_z);
+        return add(point1, calcRelativ);
     }
 }

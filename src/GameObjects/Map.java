@@ -23,22 +23,23 @@ public class Map
         double realW = pixelPoint.x() / map_path.getWidth();
         double realH = pixelPoint.y() / map_path.getHeight();
 
+        double pixelGPSDeltaX = mapRange.getPixelGPSDelta(pixelPoint);
         double deltaX = mapRange.getDeltaX();
-        double deltaY = mapRange.getMidDeltaY();
+        double deltaY = mapRange.getMidDeltaY(pixelGPSDeltaX / deltaX);
 
         double x = mapRange.getTopX() - (realH * deltaX);
-        double y = mapRange.getLeftMid().y() + (realW * deltaY);
+        double y = mapRange.getLeftMid(pixelGPSDeltaX / deltaX).y() + (realW * deltaY);
 
         return new Point3D(x, y, 0);
     }
 
     public Point3D gpsToPixle(Point3D gpsPoint)
     {
-        double rel_x = mapRange.getTopX() - gpsPoint.x();
-        double rel_y = gpsPoint.y() - mapRange.getLeftMid().y();
-
         double deltaX = mapRange.getDeltaX();
-        double deltaY = mapRange.getMidDeltaY();
+        double rel_x = mapRange.getPixelGPSDelta(gpsPoint);
+
+        double deltaY = mapRange.getMidDeltaY(rel_x / deltaX);
+        double rel_y = gpsPoint.y() - mapRange.getLeftMid(rel_x / deltaX).y();
 
         double realW = rel_x / deltaX;
         double realH = rel_y / deltaY;

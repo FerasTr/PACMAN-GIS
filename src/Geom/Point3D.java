@@ -103,6 +103,11 @@ public class Point3D implements Geom_element, Serializable
         return this.distance3D(p2.x(), p2.y(), this.z());
     }
 
+    public double distanceFromZero()
+    {
+        return this.distance3D(0, 0, 0);
+    }
+
     public double distance3D(Point3D p2)
     {
         return this.distance3D(p2.x(), p2.y(), p2.z());
