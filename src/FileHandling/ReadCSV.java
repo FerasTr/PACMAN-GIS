@@ -3,6 +3,7 @@ package FileHandling;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -19,9 +20,9 @@ final public class ReadCSV
     {
     }
 
-    public static Set<GameElement> parsing(String name)
+    public static ArrayList<GameElement> parsing(String name)
     {
-        Set<GameElement> state = new LinkedHashSet<GameElement>();
+        ArrayList<GameElement> state = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(name)))
         {
             // Skip the first line in the csv file (HEADER AND TITLES).

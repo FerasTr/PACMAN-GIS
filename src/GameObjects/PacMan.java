@@ -13,7 +13,8 @@ public class PacMan implements GameElement
     private static int ID = -1;
 
     private Point3D location;
-    private Metadata information;
+    private double speed;
+    private double radius;
 
     private Path path;
 
@@ -23,8 +24,10 @@ public class PacMan implements GameElement
         String location_string = "(" + lat + "," + lon + "," + alt + ")";
         this.location = new Point3D(location_string);
         ID++;
-        this.information = new Metadata("P", String.valueOf(ID), String.valueOf(speed), String.valueOf(radius));
+        this.speed = speed;
+        this.radius = radius;
         path = new Path(ID);
+        path.addPointToPath(this.location);
     }
 
     public PacMan(String id, String lat, String lon, String alt, String speed, String radius)
@@ -32,8 +35,18 @@ public class PacMan implements GameElement
         String location_string = "(" + lat + "," + lon + "," + alt + ")";
         this.location = new Point3D(location_string);
         ID = Integer.parseInt(id);
-        this.information = new Metadata("P", String.valueOf(ID), speed, radius);
+        this.speed = Double.parseDouble(speed);
+        this.radius = Double.parseDouble(radius);
         path = new Path(ID);
+        path.addPointToPath(this.location);
+    }
+
+    public PacMan(PacMan n)
+    {
+        this.location = new Point3D(n.getLocation());
+        this.speed = n.getSpeed();
+        this.radius = n.getRadius();
+        this.path = n.getPath();
     }
 
     @Override
@@ -43,23 +56,37 @@ public class PacMan implements GameElement
     }
 
     @Override
-    public Metadata getData()
+    public String getType()
     {
-        return this.information;
+        return "P";
     }
 
+    public double getId()
+    {
+        return ID;
+    }
+
+    public double getSpeed()
+    {
+        return speed;
+    }
+
+    public double getRadius()
+    {
+        return radius;
+    }
 
     @Override
     public String toString()
     {
         StringBuilder csvFormat = new StringBuilder();
-        csvFormat.append(this.information.getType() + ",");
-        csvFormat.append(this.information.getId() + ",");
+        csvFormat.append(getType() + ",");
+        csvFormat.append(getId() + ",");
         csvFormat.append(this.location.x() + ",");
         csvFormat.append(this.location.y() + ",");
         csvFormat.append(this.location.z() + ",");
-        csvFormat.append(this.information.getSpeed() + ",");
-        csvFormat.append(this.information.getRadius());
+        csvFormat.append(getSpeed());
+        csvFormat.append(getRadius());
         return csvFormat.toString();
     }
 
@@ -79,11 +106,10 @@ public class PacMan implements GameElement
 
     public double distanceToScore(Fruit target)
     {
-        double radius = Double.parseDouble(this.information.getRadius());
-        double distance = (MyCoords.distance3d(this.location, target.getLocation()) - radius);
+        double distance = (MyCoords.distance3d(this.location, target.getLocation()) - this.radius);
         if (distance <= 0)
         {
-            return -1;
+            return 0;
         }
         return distance;
     }
@@ -101,5 +127,20 @@ public class PacMan implements GameElement
     public void updateLocation(Point3D location)
     {
         this.location = location;
+    }
+
+    public double getPathTime()
+    {
+        return this.path.getTimeForPath();
+    }
+
+    public double rawDistance(Fruit target)
+    {
+        return (MyCoords.distance3d(this.location, target.getLocation()));
+    }
+
+    public void restartPath()
+    {
+        this.path = new Path(ID);
     }
 }

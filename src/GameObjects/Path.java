@@ -9,6 +9,7 @@ import java.util.*;
 public class Path
 {
     private ArrayList<Point3D> path_in_points;
+    private ArrayList<Point3D> fruitsInPath;
     private Color color;
     private double timeToComplete = 0;
 
@@ -20,6 +21,12 @@ public class Path
         color = randomColor();
         parentID = ID;
     }
+
+    public void addPointToPath(Point3D p)
+    {
+        path_in_points.add(p);
+    }
+
 
     private Color randomColor()
     {
@@ -69,6 +76,12 @@ public class Path
     {
         timeToComplete += time;
     }
+
+    public double getTimeForPath()
+    {
+        return timeToComplete;
+    }
+
     public ArrayList<Point3D> getPathList()
     {
         return path_in_points;

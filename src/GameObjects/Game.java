@@ -6,13 +6,15 @@ import FileHandling.WriteCSV;
 import java.io.File;
 import java.util.*;
 
-public class Game implements Set<GameElement>
+public class Game
 {
-    private Set<GameElement> objects;
+    private ArrayList<GameElement> objects;
+    private double timeForGame = 0;
+    private double longestTime = -1;
 
     public Game()
     {
-        objects = new LinkedHashSet<GameElement>();
+        objects = new ArrayList<GameElement>();
     }
 
     public Game(String csv_file)
@@ -27,7 +29,51 @@ public class Game implements Set<GameElement>
 
     public Game(Game game)
     {
-        this.objects = new LinkedHashSet<>(game.objects);
+        Iterator<GameElement> itr = game.iterator();
+        while (itr.hasNext())
+        {
+            GameElement n = itr.next();
+            if (n instanceof PacMan)
+            {
+                this.add(new PacMan((PacMan) n));
+
+            }
+            else
+            {
+                this.add(new Fruit((Fruit) n));
+            }
+        }
+
+        this.timeForGame = game.timeForGame;
+        this.longestTime = game.longestTime;
+    }
+
+    public void setTimeForGame(double timeForGame)
+    {
+        this.timeForGame = timeForGame;
+    }
+
+    public void setLongestTime(double longestTime)
+    {
+        this.longestTime = longestTime;
+    }
+
+    public void updateLongestTime()
+    {
+        longestTime = Integer.MIN_VALUE;
+        for (PacMan p : listPacman())
+        {
+            double time = p.getPathTime();
+            if (time > longestTime)
+            {
+                longestTime = time;
+            }
+        }
+    }
+
+    public double getLongestTime()
+    {
+        return longestTime;
     }
 
     public void saveToCSV()
@@ -35,11 +81,21 @@ public class Game implements Set<GameElement>
         WriteCSV.WriteToCSV(this);
     }
 
-    @Override
-    public int size()
+    public Iterator<GameElement> iterator()
     {
-        return this.objects.size();
+        return objects.iterator();
     }
+
+    public void add(GameElement o)
+    {
+        objects.add(o);
+    }
+
+    public void remove(GameElement o)
+    {
+        objects.remove(o);
+    }
+
 
     public int sizePacman()
     {
@@ -105,78 +161,6 @@ public class Game implements Set<GameElement>
         return fruit;
     }
 
-    @Override
-    public boolean isEmpty()
-    {
-        return this.objects.isEmpty();
-    }
-
-    @Override
-    public boolean contains(Object o)
-    {
-        return this.objects.contains(o);
-    }
-
-    @Override
-    public Iterator<GameElement> iterator()
-    {
-        return this.objects.iterator();
-    }
-
-    @Override
-    public Object[] toArray()
-    {
-        return this.objects.toArray();
-    }
-
-    @Override
-    public <T> T[] toArray(T[] a)
-    {
-        return this.objects.toArray(a);
-    }
-
-    @Override
-    public boolean add(GameElement gameElement)
-    {
-        return this.objects.add(gameElement);
-    }
-
-    @Override
-    public boolean remove(Object o)
-    {
-        return this.objects.remove(o);
-    }
-
-    @Override
-    public boolean containsAll(Collection<?> c)
-    {
-        return this.objects.containsAll(c);
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends GameElement> c)
-    {
-        return this.objects.addAll(c);
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c)
-    {
-        return this.objects.retainAll(c);
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c)
-    {
-        return this.objects.removeAll(c);
-    }
-
-    @Override
-    public void clear()
-    {
-        this.objects.clear();
-    }
-
     public String toString()
     {
         String toPrint = "";
@@ -185,5 +169,31 @@ public class Game implements Set<GameElement>
             toPrint += element.toString() + '\n';
         }
         return toPrint;
+    }
+
+    public void updateTimeForGame(double seconds)
+    {
+        timeForGame += seconds;
+    }
+
+    public double getTimeForGame()
+    {
+        return timeForGame;
+    }
+
+    public void resetPaths(){
+        for (GameElement pacman: objects)
+        {
+
+            if(pacman instanceof PacMan)
+            {
+                ((PacMan) pacman).restartPath();
+            }
+        }
+    }
+
+    public void resetGame()
+    {
+        objects.clear();
     }
 }

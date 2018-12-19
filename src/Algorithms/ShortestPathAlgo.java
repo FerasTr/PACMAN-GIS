@@ -1,5 +1,6 @@
 package Algorithms;
 
+import Coords.MyCoords;
 import GameObjects.*;
 import Geom.Point3D;
 
@@ -12,22 +13,17 @@ final public class ShortestPathAlgo
     {
     }
 
-    private static PacMan fastestToEat(Fruit currentFruit, Game gameState)
+    private static Fruit fastestToEat(PacMan player, ArrayList<Fruit> targets)
     {
-        PacMan close = null;
-        ArrayList<PacMan> players = gameState.listPacman();
-        double bestTime = Integer.MAX_VALUE;
-        for (PacMan canidate : players)
+        Fruit close = null;
+        double bestDist = Double.MAX_VALUE;
+
+        for (Fruit canidate : targets)
         {
-            double currentDist = canidate.distanceToScore(currentFruit);
-            if (currentDist == -1)
+            double currentDist = player.distanceToScore(canidate);
+            if (currentDist < bestDist)
             {
-                return canidate;
-            }
-            double currentTime = currentDist / Double.parseDouble(canidate.getData().getSpeed());
-            if (currentTime < bestTime)
-            {
-                bestTime = currentTime;
+                bestDist = currentDist;
                 close = canidate;
             }
         }
@@ -36,47 +32,58 @@ final public class ShortestPathAlgo
 
     public static void algorithm(Game game)
     {
-        Game temp = new Game(game);
-        ArrayList<Fruit> targets = temp.listFruit();
-        Iterator<Fruit> itr = targets.iterator();
+        ArrayList<Fruit> targets = game.listFruit();
+        ArrayList<PacMan> players = game.listPacman();
+        double bestTime;
+        Fruit bestTarget = null;
+        PacMan bestPlayer = null;
+        Point3D bestPoint;
+        Path bestPath;
 
-        while (itr.hasNext())
+        while (!targets.isEmpty())
         {
-            Fruit currentTarget = itr.next();
+            bestTime = Integer.MAX_VALUE;
+            for (PacMan player : players)
+            {
+                System.out.println("DEBUG ENDLESS LOOP HERE");
+                Point3D playerLocation = player.getLocation();
+                double radius = player.getRadius();
+                double speed = player.getSpeed();
+                double currentPlayerTime = player.getPathTime();
 
-            PacMan close = fastestToEat(currentTarget, temp);
-            updateTime(close, currentTarget);
-            if (currentTarget.isNotEaten())
-            {
-                ArrayList<Point3D> paths = close.getPath().getPathList();
-                if (paths.isEmpty())
+                Fruit close = fastestToEat(player, targets);
+
+                Point3D targetLocation = close.getLocation();
+                bestPoint = nextPointByRadius(playerLocation, targetLocation, radius);
+                double distanceToNextPoint = MyCoords.distance3d(player.getLocation(), bestPoint);
+                double time = distanceToNextPoint / speed;
+                double timeForPotintioalFruit = currentPlayerTime + time;
+                if (timeForPotintioalFruit < bestTime)
                 {
-                    paths.add(close.getLocation());
+                    bestTime = timeForPotintioalFruit;
+                    bestTarget = close;
+                    bestPlayer = player;
                 }
-                close.updateLocation(currentTarget.getLocation());
-                paths.add(close.getLocation());
-                currentTarget.setEaten();
-                itr.remove();
             }
-            else
-            {
-                System.out.println(currentTarget.getLocation().toFile() + " is eaten");
-            }
+            bestPoint = nextPointByRadius(bestPlayer.getLocation(), bestTarget.getLocation(), bestPlayer.getRadius());
+            bestPath = bestPlayer.getPath();
+            bestPath.addPointToPath(bestPoint);
+            bestPath.setTimeForPath(bestTime);
+            bestTarget.setEaten();
         }
     }
 
-    private static void updateTime(PacMan pacman, Fruit target)
+    public static Point3D nextPointByRadius(Point3D pac, Point3D fruit, double radius)
     {
-        double distance = pacman.distanceToScore(target);
-        if (distance == -1)
+        Point3D current = MyCoords.vector3D(pac, fruit);
+        double currentLength = current.distance3D(0, 0, 0);
+        if (currentLength <= radius)
         {
-            pacman.getPath().setTimeForPath(0);
-            target.setEaten();
+            return pac;
         }
-        else
-        {
-            double currentTime = distance / Double.parseDouble(pacman.getData().getSpeed());
-            pacman.getPath().setTimeForPath(currentTime);
-        }
+        double relative = (currentLength - radius) / currentLength;
+        Point3D ratioVector = new Point3D(current.x() * relative, current.y() * relative, current.z() * relative);
+
+        return MyCoords.add(pac, ratioVector);
     }
 }

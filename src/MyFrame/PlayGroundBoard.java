@@ -51,7 +51,7 @@ public class PlayGroundBoard extends JPanel
     {
         this.removeMouseListener(fruitMouse);
         this.removeMouseListener(pacmanMouse);
-        gameSettings.clear();
+        gameSettings.resetGame();
         repaint();
     }
 
@@ -121,7 +121,7 @@ public class PlayGroundBoard extends JPanel
 
         twoG.setColor(path.getColor());
         ArrayList<Point3D> pointsPaths = path.getPathList();
-
+        System.out.println(pointsPaths.size());
         for (int i = 1; i < pointsPaths.size(); i++)
         {
             Point3D front = pointsPaths.get(i);
@@ -174,7 +174,7 @@ public class PlayGroundBoard extends JPanel
                 PacMan toAdd = new PacMan(inGPS.x(), inGPS.y(), inGPS.z(), 1, 1);
                 gameSettings.add(toAdd);
                 repaint();
-                System.out.println("PACMAN ADDED " + toAdd.getData().getId() + " --> PIXEL: [" + (int) p.x() + "," + (int) p.y() + "] GIS: [" + inGPS.x() + "," + inGPS.y() + "]");
+                System.out.println("PACMAN ADDED " + toAdd.getId() + " --> PIXEL: [" + (int) p.x() + "," + (int) p.y() + "] GIS: [" + inGPS.x() + "," + inGPS.y() + "]");
             }
 
             @Override
@@ -223,7 +223,7 @@ public class PlayGroundBoard extends JPanel
                 Fruit toAdd = new Fruit(inGPS.x(), inGPS.y(), inGPS.z(), 1);
                 gameSettings.add(toAdd);
                 repaint();
-                System.out.println("FRUIT ADDED " + toAdd.getData().getId() + " --> PIXEL: [" + (int) p.x() + "," + (int) p.y() + "] GIS: [" + inGPS.x() + "," + inGPS.y() + "]");
+                System.out.println("FRUIT ADDED " + toAdd.getId() + " --> PIXEL: [" + (int) p.x() + "," + (int) p.y() + "] GIS: [" + inGPS.x() + "," + inGPS.y() + "]");
             }
 
             @Override
@@ -261,13 +261,20 @@ public class PlayGroundBoard extends JPanel
         {
             if (l.getPath().getPathList().isEmpty())
             {
-                System.out.println("PACMAN ID: " + l.getData().getId() + " is still");
+                System.out.println("PACMAN ID: " + l.getId() + " is still");
             }
             else
             {
-                System.out.println("PACMAN ID: " + l.getData().getId() + " " + l.getPath().toString());
+                System.out.println("PACMAN ID: " + l.getId() + " " + l.getPath().toString());
             }
         }
         repaint();
+    }
+
+    public void simulateRun()
+    {
+        RealTime simulation = new RealTime(this);
+        Thread thread = new Thread(simulation);
+        thread.start();
     }
 }

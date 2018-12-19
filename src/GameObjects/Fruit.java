@@ -13,24 +13,33 @@ public class Fruit implements GameElement
     private static int ID = -1;
 
     private Point3D location;
-    private Metadata information;
+    private double weight;
 
-    boolean NotEaten = true;
+    boolean NotEaten = true; // true not eaten, false eaten
 
+    // For manual
     public Fruit(double lat, double lon, double alt, double weight)
     {
         String location_string = "(" + lat + "," + lon + "," + alt + ")";
         this.location = new Point3D(location_string);
         ID++;
-        this.information = new Metadata("F", String.valueOf(ID), String.valueOf(weight));
+
+        this.weight = weight;
     }
 
+    // For csv
     public Fruit(String id, String lat, String lon, String alt, String weight)
     {
         String location_string = "(" + lat + "," + lon + "," + alt + ")";
         this.location = new Point3D(location_string);
         ID = Integer.parseInt(id);
-        this.information = new Metadata("F", String.valueOf(ID), weight);
+        this.weight = Double.parseDouble(weight);
+    }
+
+    public Fruit(Fruit n)
+    {
+        this.location = new Point3D(n.getLocation());
+        this.weight = n.getWeight();
     }
 
     @Override
@@ -40,9 +49,19 @@ public class Fruit implements GameElement
     }
 
     @Override
-    public Metadata getData()
+    public String getType()
     {
-        return this.information;
+        return "F";
+    }
+
+    public double getWeight()
+    {
+        return weight;
+    }
+
+    public double getId()
+    {
+        return ID;
     }
 
 
@@ -50,12 +69,12 @@ public class Fruit implements GameElement
     public String toString()
     {
         StringBuilder csvFormat = new StringBuilder();
-        csvFormat.append(this.information.getType() + ",");
-        csvFormat.append(this.information.getId() + ",");
+        csvFormat.append(getType() + ",");
+        csvFormat.append(getId() + ",");
         csvFormat.append(this.location.x() + ",");
         csvFormat.append(this.location.y() + ",");
         csvFormat.append(this.location.z() + ",");
-        csvFormat.append(this.information.getSpeed());
+        csvFormat.append(getWeight());
         return csvFormat.toString();
     }
 
