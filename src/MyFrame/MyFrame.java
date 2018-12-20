@@ -132,7 +132,9 @@ public class MyFrame extends JFrame
 
     private void saveGameCSV(Game currentGame)
     {
-        currentGame.saveToCSV();
+        Game toSave = new Game(currentGame);
+        toSave.resetPacPost();
+        toSave.saveToCSV();
     }
 
     private void loadGameCSV(File selectedFile)

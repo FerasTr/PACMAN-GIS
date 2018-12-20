@@ -29,6 +29,7 @@ public class Game
 
     public Game(Game game)
     {
+        this.objects = new ArrayList<GameElement>();
         Iterator<GameElement> itr = game.iterator();
         while (itr.hasNext())
         {
@@ -181,11 +182,12 @@ public class Game
         return timeForGame;
     }
 
-    public void resetPaths(){
-        for (GameElement pacman: objects)
+    public void resetPaths()
+    {
+        for (GameElement pacman : objects)
         {
 
-            if(pacman instanceof PacMan)
+            if (pacman instanceof PacMan)
             {
                 ((PacMan) pacman).restartPath();
             }
@@ -195,5 +197,14 @@ public class Game
     public void resetGame()
     {
         objects.clear();
+    }
+
+    public void resetPacPost()
+    {
+        ArrayList<PacMan> pacs = listPacman();
+        for (PacMan pac : pacs)
+        {
+            pac.resetToStart();
+        }
     }
 }

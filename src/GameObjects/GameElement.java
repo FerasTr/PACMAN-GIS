@@ -11,6 +11,12 @@ public interface GameElement
 
     public String getType();
 
+    public double getSpeed();
+
+    public double getRadius();
+
+    public int getId();
+
     public String toString();
 
     public BufferedImage getIcon();

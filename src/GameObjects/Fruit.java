@@ -32,7 +32,7 @@ public class Fruit implements GameElement
     {
         String location_string = "(" + lat + "," + lon + "," + alt + ")";
         this.location = new Point3D(location_string);
-        ID = Integer.parseInt(id);
+        ID = (int) Double.parseDouble(id);
         this.weight = Double.parseDouble(weight);
     }
 
@@ -54,12 +54,25 @@ public class Fruit implements GameElement
         return "F";
     }
 
+    @Override
+    public double getSpeed()
+    {
+        return weight;
+    }
+
+    @Override
+    public double getRadius()
+    {
+        return -1;
+    }
+
     public double getWeight()
     {
         return weight;
     }
 
-    public double getId()
+    @Override
+    public int getId()
     {
         return ID;
     }

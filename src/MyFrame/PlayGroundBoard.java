@@ -91,8 +91,7 @@ public class PlayGroundBoard extends JPanel
                 locationInPixel = pointAfterResize(locationInPixel);
                 BufferedImage icon = object.getIcon();
                 icon = rescaleIcon(icon);
-                g.drawImage(icon, (int) locationInPixel.x() - (icon.getWidth() / 2),
-                        (int) locationInPixel.y() - (icon.getHeight() / 2), this);
+                g.drawImage(icon, (int) locationInPixel.x() - (icon.getWidth() / 2), (int) locationInPixel.y() - (icon.getHeight() / 2), this);
 
             }
         }
@@ -128,7 +127,7 @@ public class PlayGroundBoard extends JPanel
             front = m.gpsToPixle(front);
             front = pointAfterResize(front);
             Point3D back = pointsPaths.get(i - 1);
-            System.out.println("POINT IN PATH " + back.toFile());
+            //System.out.println("POINT IN PATH " + back.toFile());
             back = m.gpsToPixle(back);
             back = pointAfterResize(back);
 
@@ -256,20 +255,9 @@ public class PlayGroundBoard extends JPanel
 
     public void runGame()
     {
-        ShortestPathAlgo.algorithm(gameSettings);
-        ArrayList<PacMan> asd = gameSettings.listPacman();
-        for (PacMan l : asd)
-        {
-            if (l.getPath().getPathList().isEmpty())
-            {
-                System.out.println("PACMAN ID: " + l.getId() + " is still");
-            }
-            else
-            {
-                System.out.println("PACMAN ID: " + l.getId() + " " + l.getPath().toString());
-            }
-        }
-        repaint();
+        /*ShortestPathAlgo.algorithm(gameSettings);
+        repaint();*/
+        simulateRun();
     }
 
     public void simulateRun()

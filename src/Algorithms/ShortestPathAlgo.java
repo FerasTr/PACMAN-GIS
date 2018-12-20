@@ -129,18 +129,32 @@ final public class ShortestPathAlgo
             Path p = close.getPath();
             p.addPointToPath(close.getLocation());
             p.setTimeForPath(timeToEatClose);
-            double steps = close.distanceToScore(currentTarget) / close.getSpeed();
+            game.updateTimeForGame(timeToEatClose);
+            double speed = close.getSpeed();
+            double steps = close.distanceToScore(currentTarget) / speed;
             System.out.println(steps);
+            Point3D asd = new Point3D(close.getLocation());
+            Point3D point;
             for (int i = 0; i < steps; i++)
             {
-                Point3D point = nextPointByRadius(close.getLocation(), currentTarget.getLocation(), close.getRadius());
-                p.addPointToPath(point);
-                close.updateLocation(point);
-                System.out.println("DEBUG " + point.toFile());
+                point = nextPointByRadius(asd, close.getLocation(), currentTarget.getLocation(), speed);
+                if (!point.equals(close.getLocation()))
+                {
+                    System.out.println("DEBUG " + point.toFile());
+                    close.updateLocation(point);
+                    p.addPointToPath(close.getLocation());
+                }
+                else
+                {
+                    System.out.println("OUT");
+                    p.addPointToPath(currentTarget.getLocation());
+                    break;
+                }
             }
             currentTarget.setEaten();
             itr.remove();
         }
+        game.resetPacPost();
     }
 
     private static double calcTimeToEat(PacMan close, Fruit currentTarget)
@@ -159,15 +173,19 @@ final public class ShortestPathAlgo
         return currentLength / speed;
     }
 
-    public static Point3D nextPointByRadius(Point3D pac, Point3D fruit, double radius)
+    public static Point3D nextPointByRadius(Point3D asd, Point3D pac, Point3D fruit, double speed)
     {
         Point3D current = MyCoords.vector3D(pac, fruit);
         double currentLength = current.distance3D(0, 0, 0);
-        if (currentLength <= radius)
+        double realLength = MyCoords.vector3D(asd, fruit).distance3D(0, 0, 0);
+        double relative = (currentLength - speed) / realLength;
+        System.out.println(relative);
+        relative = 1 - relative;
+        if (relative > 1)
         {
             return pac;
         }
-        double relative = (currentLength - radius) / currentLength;
+        System.out.println(relative);
         Point3D ratioVector = new Point3D(current.x() * relative, current.y() * relative, current.z() * relative);
 
         return MyCoords.add(pac, ratioVector);

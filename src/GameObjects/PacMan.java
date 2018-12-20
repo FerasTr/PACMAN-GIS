@@ -13,6 +13,7 @@ public class PacMan implements GameElement
     private static int ID = -1;
 
     private Point3D location;
+    private Point3D startingPos;
     private double speed;
     private double radius;
 
@@ -23,6 +24,8 @@ public class PacMan implements GameElement
     {
         String location_string = "(" + lat + "," + lon + "," + alt + ")";
         this.location = new Point3D(location_string);
+        String startingString = "(" + lat + "," + lon + "," + alt + ")";
+        this.startingPos = new Point3D(startingString);
         ID++;
         this.speed = speed;
         this.radius = radius;
@@ -33,7 +36,9 @@ public class PacMan implements GameElement
     {
         String location_string = "(" + lat + "," + lon + "," + alt + ")";
         this.location = new Point3D(location_string);
-        ID = Integer.parseInt(id);
+        String startingString = "(" + lat + "," + lon + "," + alt + ")";
+        this.startingPos = new Point3D(startingString);
+        ID = (int) Double.parseDouble(id);
         this.speed = Double.parseDouble(speed);
         this.radius = Double.parseDouble(radius);
         path = new Path(ID);
@@ -42,6 +47,7 @@ public class PacMan implements GameElement
     public PacMan(PacMan n)
     {
         this.location = new Point3D(n.getLocation());
+        this.startingPos = new Point3D(n.startingPos);
         this.speed = n.getSpeed();
         this.radius = n.getRadius();
         this.path = n.getPath();
@@ -59,16 +65,19 @@ public class PacMan implements GameElement
         return "P";
     }
 
-    public double getId()
+    @Override
+    public int getId()
     {
         return ID;
     }
 
+    @Override
     public double getSpeed()
     {
         return speed;
     }
 
+    @Override
     public double getRadius()
     {
         return radius;
@@ -83,7 +92,7 @@ public class PacMan implements GameElement
         csvFormat.append(this.location.x() + ",");
         csvFormat.append(this.location.y() + ",");
         csvFormat.append(this.location.z() + ",");
-        csvFormat.append(getSpeed());
+        csvFormat.append(getSpeed() + ",");
         csvFormat.append(getRadius());
         return csvFormat.toString();
     }
@@ -140,5 +149,10 @@ public class PacMan implements GameElement
     public void restartPath()
     {
         this.path = new Path(ID);
+    }
+
+    public void resetToStart()
+    {
+        this.updateLocation(new Point3D(startingPos));
     }
 }
