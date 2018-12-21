@@ -3,6 +3,7 @@ package FileHandling;
 import GameObjects.Game;
 import GameObjects.GameElement;
 import GameObjects.PacMan;
+import GameObjects.Path;
 import Geom.Point3D;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -16,6 +17,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -46,7 +48,6 @@ public final class WriteToKML
     private static DocumentBuilder dom_builder;
     private static Document dom_document;
     private static Element xml_element;
-    private static Game file;
 
     private WriteToKML()
     {
@@ -55,7 +56,6 @@ public final class WriteToKML
 
     public static void FromFile(Game game)
     {
-        file = game;
         init();
         Convert(game);
         try
@@ -95,6 +95,7 @@ public final class WriteToKML
 
     private static void create_kml(GameElement element)
     {
+
         // USED THE PROVIDED KML EXAMPLE FILE AS A STARTING POINT \\
         double speed = element.getSpeed();
         double radius = element.getRadius();
@@ -123,18 +124,10 @@ public final class WriteToKML
             Element lineString = dom_document.createElement("LineString");
             newP.appendChild(lineString);
             Element coord = dom_document.createElement("coordinates");
-            StringBuilder strCoords = new StringBuilder();
-            Iterator<Point3D> points = ((PacMan) element).getPath().getPathList().iterator();
-            Point3D p;
-            while (points.hasNext())
-            {
-                p = points.next();
-                strCoords.append(p.y());
-                strCoords.append(",");
-                strCoords.append(p.x());
-                strCoords.append("\n");
-            }
-            coord.appendChild(dom_document.createTextNode(strCoords.toString()));
+
+            String PointsString = getPointsInPath((PacMan) element, "\n");
+
+            coord.appendChild(dom_document.createTextNode(PointsString));
             lineString.appendChild(coord);
             Element style = dom_document.createElement("Style");
             newP.appendChild(style);
@@ -152,16 +145,62 @@ public final class WriteToKML
             width.appendChild(dom_document.createTextNode("5"));
             LineStyle.appendChild(width);
 
+
         }
 
         format = dom_document.createElement("styleUrl");
         format.appendChild(dom_document.createTextNode(iconByType(type)));
         placemark.appendChild(format);
-        point = dom_document.createElement("Point");
-        placemark.appendChild(point);
-        coor = dom_document.createElement("coordinates");
-        point.appendChild(coor);
-        coor.appendChild(dom_document.createTextNode(element.getLocation().y() + "," + element.getLocation().x()));
+
+
+        if (element instanceof PacMan)
+        {
+            String PointsString = getPointsInPath((PacMan) element, "@");
+            String[] pointsString = PointsString.split("@");
+            for (int i = 0; i < pointsString.length; i++)
+            {
+                long timeForGame = System.currentTimeMillis();
+                long timeForPath = (int) ((PacMan) element).getPathTime() + timeForGame;
+                Date dateInMill = new Date(timeForPath);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
+                String date = dateFormat.format(dateInMill);
+                Element TimeStamp = dom_document.createElement("TimeStamp");
+                placemark.appendChild(TimeStamp);
+                Element when = dom_document.createElement("when");
+                when.appendChild(dom_document.createTextNode(date));
+                TimeStamp.appendChild(when);
+                point = dom_document.createElement("Point");
+                placemark.appendChild(point);
+                coor = dom_document.createElement("coordinates");
+                point.appendChild(coor);
+                coor.appendChild(dom_document.createTextNode(pointsString[i]));
+            }
+
+        }
+        else
+        {
+            point = dom_document.createElement("Point");
+            placemark.appendChild(point);
+            coor = dom_document.createElement("coordinates");
+            point.appendChild(coor);
+            coor.appendChild(dom_document.createTextNode(element.getLocation().y() + "," + element.getLocation().x()));
+        }
+    }
+
+    private static String getPointsInPath(PacMan element, String split)
+    {
+        StringBuilder PointsString = new StringBuilder();
+        Iterator<Point3D> points = element.getPath().getPathList().iterator();
+        Point3D p;
+        while (points.hasNext())
+        {
+            p = points.next();
+            PointsString.append(p.y());
+            PointsString.append(",");
+            PointsString.append(p.x());
+            PointsString.append(split);
+        }
+        return PointsString.toString();
     }
 
 
@@ -229,8 +268,7 @@ public final class WriteToKML
 
     private static String getDateName()
     {
-        Calendar whole_date = null;
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar whole_date;
         Date date_recorded = new Date();
         whole_date = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         whole_date.setTime(date_recorded);
