@@ -4,6 +4,7 @@ import Algorithms.ShortestPathAlgo;
 import Coords.MyCoords;
 import GameObjects.Game;
 import GameObjects.PacMan;
+import GameObjects.secondsPoint3D;
 import Geom.Point3D;
 
 import javax.swing.*;
@@ -37,10 +38,10 @@ public class RealTime implements Runnable
             timeDiff = System.currentTimeMillis() - beforeTime;
             for(PacMan pac: game.listPacman())
             {
-                Iterator<Point3D> itr = pac.getPath().getPathList().iterator();
+                Iterator<secondsPoint3D> itr = pac.getPath().getPathList().iterator();
                 while(itr.hasNext())
                 {
-                    Point3D toMove = itr.next();
+                    Point3D toMove = itr.next().getPoint();
                     pac.updateLocation(toMove);
                     itr.remove();
                     break;

@@ -1,9 +1,6 @@
 package FileHandling;
 
-import GameObjects.Game;
-import GameObjects.GameElement;
-import GameObjects.PacMan;
-import GameObjects.Path;
+import GameObjects.*;
 import Geom.Point3D;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -157,13 +154,17 @@ public final class WriteToKML
         {
             String PointsString = getPointsInPath((PacMan) element, "@");
             String[] pointsString = PointsString.split("@");
+            String timeInString = getTime((PacMan) element, "@");
+            String[] timeInStringArray = timeInString.split("@");
             for (int i = 0; i < pointsString.length; i++)
             {
                 long timeForGame = System.currentTimeMillis();
-                long timeForPath = (int) ((PacMan) element).getPathTime() + timeForGame;
+                long timeForPath = (int) Double.parseDouble(timeInStringArray[i]) * 1000 + timeForGame;
                 Date dateInMill = new Date(timeForPath);
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
                 String date = dateFormat.format(dateInMill);
+
+
                 Element TimeStamp = dom_document.createElement("TimeStamp");
                 placemark.appendChild(TimeStamp);
                 Element when = dom_document.createElement("when");
@@ -190,14 +191,28 @@ public final class WriteToKML
     private static String getPointsInPath(PacMan element, String split)
     {
         StringBuilder PointsString = new StringBuilder();
-        Iterator<Point3D> points = element.getPath().getPathList().iterator();
-        Point3D p;
+        Iterator<secondsPoint3D> points = element.getPath().getPathList().iterator();
+
+        secondsPoint3D p;
         while (points.hasNext())
         {
             p = points.next();
-            PointsString.append(p.y());
-            PointsString.append(",");
-            PointsString.append(p.x());
+            PointsString.append(p.getPoint().y() + "," + p.getPoint().x());
+            PointsString.append(split);
+        }
+        return PointsString.toString();
+    }
+
+    private static String getTime(PacMan element, String split)
+    {
+        StringBuilder PointsString = new StringBuilder();
+        Iterator<secondsPoint3D> points = element.getPath().getPathList().iterator();
+
+        secondsPoint3D p;
+        while (points.hasNext())
+        {
+            p = points.next();
+            PointsString.append(p.getSeconds());
             PointsString.append(split);
         }
         return PointsString.toString();

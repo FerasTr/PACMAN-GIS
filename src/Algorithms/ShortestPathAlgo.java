@@ -116,10 +116,10 @@ final public class ShortestPathAlgo
             Fruit currentTarget = itr.next();
 
             PacMan close = fastestToEat(currentTarget, players);
-            double timeToEatClose = calcTimeToEat(close, currentTarget);
+            double timeToEatClose = calcTimeToEat(close, currentTarget.getLocation());
             for (PacMan canidate : players)
             {
-                double timeToEatCanidate = calcTimeToEat(canidate, currentTarget);
+                double timeToEatCanidate = calcTimeToEat(canidate, currentTarget.getLocation());
                 if (timeToEatCanidate < timeToEatClose)
                 {
                     close = canidate;
@@ -127,27 +127,30 @@ final public class ShortestPathAlgo
                 }
             }
             Path p = close.getPath();
+
             p.addPointToPath(close.getLocation());
             p.setTimeForPath(timeToEatClose);
             game.updateTimeForGame(timeToEatClose);
+
             double speed = close.getSpeed();
             double steps = close.distanceToScore(currentTarget) / speed;
-            System.out.println(steps);
+
             Point3D asd = new Point3D(close.getLocation());
+            PacMan temp = new PacMan(close);
             Point3D point;
+
             for (int i = 0; i < steps; i++)
             {
                 point = nextPointByRadius(asd, close.getLocation(), currentTarget.getLocation(), speed);
                 if (!point.equals(close.getLocation()))
                 {
-                    System.out.println("DEBUG " + point.toFile());
+                    //System.out.println("DEBUG " + point.toFile());
                     close.updateLocation(point);
-                    p.addPointToPath(close.getLocation());
+                    p.addPointToPath(close.getLocation(), (int) calcTimeToEat(temp, point));
                 }
                 else
                 {
-                    System.out.println("OUT");
-                    p.addPointToPath(currentTarget.getLocation());
+                    p.addPointToPath(currentTarget.getLocation(), (int) timeToEatClose);
                     break;
                 }
             }
@@ -157,9 +160,8 @@ final public class ShortestPathAlgo
         game.resetPacPost();
     }
 
-    private static double calcTimeToEat(PacMan close, Fruit currentTarget)
+    private static double calcTimeToEat(PacMan close, Point3D fruitLocation)
     {
-        Point3D fruitLocation = currentTarget.getLocation();
         Point3D closeLocation = close.getLocation();
         double speed = close.getSpeed();
         double radius = close.getRadius();
@@ -185,7 +187,7 @@ final public class ShortestPathAlgo
         {
             return pac;
         }
-        System.out.println(relative);
+        //System.out.println(relative);
         Point3D ratioVector = new Point3D(current.x() * relative, current.y() * relative, current.z() * relative);
 
         return MyCoords.add(pac, ratioVector);

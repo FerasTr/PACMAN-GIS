@@ -119,14 +119,14 @@ public class PlayGroundBoard extends JPanel
         Path path = p.getPath();
 
         twoG.setColor(path.getColor());
-        ArrayList<Point3D> pointsPaths = path.getPathList();
+        ArrayList<secondsPoint3D> pointsPaths = path.getPathList();
         System.out.println(pointsPaths.size());
         for (int i = 1; i < pointsPaths.size(); i++)
         {
-            Point3D front = pointsPaths.get(i);
+            Point3D front = pointsPaths.get(i).getPoint();
             front = m.gpsToPixle(front);
             front = pointAfterResize(front);
-            Point3D back = pointsPaths.get(i - 1);
+            Point3D back = pointsPaths.get(i - 1).getPoint();
             //System.out.println("POINT IN PATH " + back.toFile());
             back = m.gpsToPixle(back);
             back = pointAfterResize(back);

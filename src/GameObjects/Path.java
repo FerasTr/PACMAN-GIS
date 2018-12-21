@@ -8,8 +8,7 @@ import java.util.*;
 
 public class Path
 {
-    private ArrayList<Point3D> path_in_points;
-    private ArrayList<Point3D> fruitsInPath;
+    private ArrayList<secondsPoint3D> path_in_points;
     private Color color;
     private double timeToComplete = 0;
 
@@ -17,14 +16,19 @@ public class Path
 
     public Path(int ID)
     {
-        path_in_points = new ArrayList<Point3D>();
+        path_in_points = new ArrayList<secondsPoint3D>();
         color = randomColor();
         parentID = ID;
     }
 
+    public void addPointToPath(Point3D p,int second)
+    {
+        path_in_points.add(new secondsPoint3D(p,second));
+    }
+
     public void addPointToPath(Point3D p)
     {
-        path_in_points.add(p);
+        path_in_points.add(new secondsPoint3D(p,0));
     }
 
 
@@ -44,11 +48,11 @@ public class Path
         {
             return 0;
         }
-        Iterator<Point3D> iter = this.path_in_points.iterator();
-        Point3D currentPoint = iter.next();
+        Iterator<secondsPoint3D> iter = this.path_in_points.iterator();
+        Point3D currentPoint = iter.next().getPoint();
         while (iter.hasNext())
         {
-            Point3D nextPoint = iter.next();
+            Point3D nextPoint = iter.next().getPoint();
             length += MyCoords.distance3d(currentPoint, nextPoint);
             currentPoint = nextPoint;
         }
@@ -65,9 +69,9 @@ public class Path
     public String toString()
     {
         String toPrint = "";
-        for (Point3D point : path_in_points)
+        for (secondsPoint3D point : path_in_points)
         {
-            toPrint += point.toFile() + '\n';
+            toPrint += point.getPoint().toFile() + '\n';
         }
         return toPrint + " time: " + timeToComplete;
     }
@@ -82,7 +86,7 @@ public class Path
         return timeToComplete;
     }
 
-    public ArrayList<Point3D> getPathList()
+    public ArrayList<secondsPoint3D> getPathList()
     {
         return path_in_points;
     }
