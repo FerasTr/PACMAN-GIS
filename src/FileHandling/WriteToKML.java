@@ -137,7 +137,7 @@ public final class WriteToKML
             coord.appendChild(dom_document.createTextNode(strCoords.toString()));
             lineString.appendChild(coord);
             Element style = dom_document.createElement("Style");
-            xml_element.appendChild(style);
+            newP.appendChild(style);
             Element LineStyle = dom_document.createElement("LineStyle");
             style.appendChild(LineStyle);
             Element color = dom_document.createElement("color");
