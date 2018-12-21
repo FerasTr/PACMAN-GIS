@@ -5,9 +5,14 @@ import GameObjects.Game;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
+/**
+ * This class writes a game state into a CSV file.
+ */
 final public class WriteCSV
 {
     private WriteCSV()
@@ -16,8 +21,8 @@ final public class WriteCSV
 
     public static void WriteToCSV(Game game)
     {
-        ArrayList pacman = game.listPacman();
-        ArrayList fruit = game.listFruit();
+        ArrayList pacmanList = game.listPacman();
+        ArrayList fruitsList = game.listFruit();
 
         String csvHeader =
                 "Type,id,Lat,Lon,Alt,Speed/Weight,Radius," + game.sizePacman() + "," + game.sizeFruit() + '\n';
@@ -31,16 +36,16 @@ final public class WriteCSV
 
             // PACMAN
 
-            for (int i = 0; i < pacman.size(); i++)
+            for (int i = 0; i < pacmanList.size(); i++)
             {
-                fileWriter.append(pacman.get(i).toString() + '\n');
+                fileWriter.append(pacmanList.get(i).toString() + '\n');
             }
 
             // Fruit
 
-            for (int i = 0; i < fruit.size(); i++)
+            for (int i = 0; i < fruitsList.size(); i++)
             {
-                fileWriter.append(fruit.get(i).toString() + '\n');
+                fileWriter.append(fruitsList.get(i).toString() + '\n');
 
             }
 
@@ -58,7 +63,7 @@ final public class WriteCSV
                 fileWriter.flush();
                 fileWriter.close();
             }
-            catch (IOException e)
+            catch (IOException | NullPointerException e)
             {
                 System.out.println("ERROR: " + e);
                 e.printStackTrace();
@@ -68,16 +73,14 @@ final public class WriteCSV
     }
 
     /**
-     * Helper method used for naming a folder.
+     * Helper method used for naming a file.
      *
      * @return time in milli seconds as a string.
      */
     private static String getDateName()
     {
-        Calendar whole_date = null;
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date_recorded = new Date();
-        whole_date = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        Calendar whole_date = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         whole_date.setTime(date_recorded);
         return whole_date.getTimeInMillis() + "";
     }

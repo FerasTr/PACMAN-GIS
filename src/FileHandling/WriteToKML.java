@@ -1,7 +1,6 @@
 package FileHandling;
 
 import GameObjects.*;
-import Geom.Point3D;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -14,8 +13,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
 import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -50,11 +47,13 @@ public final class WriteToKML
     {
     }
 
-
-    public static void FromFile(Game game)
+    /**
+     * Build the game.
+     */
+    public static void FromGame(Game game)
     {
         init();
-        Convert(game);
+        convertGame(game);
         try
         {
             output();
@@ -65,6 +64,9 @@ public final class WriteToKML
         }
     }
 
+    /**
+     * Start building.
+     */
     private static void init()
     {
         dom_factory = DocumentBuilderFactory.newInstance();
@@ -77,10 +79,10 @@ public final class WriteToKML
             e.printStackTrace();
         }
         dom_document = dom_builder.newDocument();
-        BuildXMLHeader();
+        BuildKMLHeader();
     }
 
-    private static void Convert(Game game)
+    private static void convertGame(Game game)
     {
         Iterator<GameElement> iter_file = game.iterator();
         while (iter_file.hasNext())
@@ -89,7 +91,9 @@ public final class WriteToKML
         }
     }
 
-
+    /**
+     * Create a placemark for the game object.
+     */
     private static void create_kml(GameElement element)
     {
 
@@ -98,102 +102,89 @@ public final class WriteToKML
         double radius = element.getRadius();
         String type = element.getType();
         int id = element.getId();
-        Element placemark, name, desc, time, format, point, coor;
-        // Take the information from the GameObjects element object.
+        Element placemark, name, desc, format;
+        // Take the information from the Game object.
         // Builds the placemark element (USED FOR VIEWING ONE MARK IN GOOGLE EARTH)
         placemark = dom_document.createElement("Placemark");
         xml_element.appendChild(placemark);
+
         name = dom_document.createElement("name");
         // Using CDATA instead of comments
         name.appendChild(dom_document.createCDATASection(type));
         placemark.appendChild(name);
+
         // Filling the description, TimeStamp, styleUrl, Point and coordinates from the data.
         desc = dom_document.createElement("description");
-        desc.appendChild(dom_document.createCDATASection("ID: <b>" + id + "</b><br/>Weight: " + "<b>" + speed + "</b" + ">" + "<br/>Radius: <b>" + radius + "</b>"));
+        desc.appendChild(dom_document.createCDATASection("ID: <b>" + id + "</b> <br/>Weight: " + "<b>" + speed + "</b"
+                + ">" + "<br/>Radius: <b>" + radius + "</b>"));
         placemark.appendChild(desc);
+
         if (element instanceof PacMan)
         {
-            Element newP = dom_document.createElement("Placemark");
-            xml_element.appendChild(newP);
-            name = dom_document.createElement("name");
-            name.appendChild(dom_document.createTextNode("PATH FOR PACMAN " + id));
-            newP.appendChild(name);
-            Element lineString = dom_document.createElement("LineString");
-            newP.appendChild(lineString);
-            Element coord = dom_document.createElement("coordinates");
+            Element pathPlacemark, pathName, lineString, coord, style, LineStyle, color, width;
+            pathPlacemark = dom_document.createElement("Placemark");
+            xml_element.appendChild(pathPlacemark);
 
+            pathName = dom_document.createElement("name");
+            pathName.appendChild(dom_document.createTextNode("PATH FOR PACMAN " + id));
+            pathPlacemark.appendChild(pathName);
+
+            lineString = dom_document.createElement("LineString");
+            pathPlacemark.appendChild(lineString);
+
+            coord = dom_document.createElement("coordinates");
             String PointsString = getPointsInPath((PacMan) element, "\n");
-
             coord.appendChild(dom_document.createTextNode(PointsString));
             lineString.appendChild(coord);
-            Element style = dom_document.createElement("Style");
-            newP.appendChild(style);
-            Element LineStyle = dom_document.createElement("LineStyle");
+
+            style = dom_document.createElement("Style");
+            pathPlacemark.appendChild(style);
+
+            LineStyle = dom_document.createElement("LineStyle");
             style.appendChild(LineStyle);
-            Element color = dom_document.createElement("color");
+
+            color = dom_document.createElement("color");
             LineStyle.appendChild(color);
-            Color colorbypath = ((PacMan) element).getPath().getColor();
-            int r = colorbypath.getRed();
-            int g = colorbypath.getGreen();
-            int b = colorbypath.getBlue();
-            String hex = String.format("#ff%02x%02x%02x", r, g, b);
+            String hex = getColorString((PacMan) element);
             color.appendChild(dom_document.createTextNode(hex));
-            Element width = dom_document.createElement("width");
+
+            width = dom_document.createElement("width");
             width.appendChild(dom_document.createTextNode("5"));
             LineStyle.appendChild(width);
-
-
         }
 
         format = dom_document.createElement("styleUrl");
         format.appendChild(dom_document.createTextNode(iconByType(type)));
         placemark.appendChild(format);
 
-
-        if (element instanceof PacMan)
-        {
-            String PointsString = getPointsInPath((PacMan) element, "@");
-            String[] pointsString = PointsString.split("@");
-            String timeInString = getTime((PacMan) element, "@");
-            String[] timeInStringArray = timeInString.split("@");
-            for (int i = 0; i < pointsString.length; i++)
-            {
-                long timeForGame = System.currentTimeMillis();
-                long timeForPath = (int) Double.parseDouble(timeInStringArray[i]) * 1000 + timeForGame;
-                Date dateInMill = new Date(timeForPath);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
-                String date = dateFormat.format(dateInMill);
-
-
-                Element TimeStamp = dom_document.createElement("TimeStamp");
-                placemark.appendChild(TimeStamp);
-                Element when = dom_document.createElement("when");
-                when.appendChild(dom_document.createTextNode(date));
-                TimeStamp.appendChild(when);
-                point = dom_document.createElement("Point");
-                placemark.appendChild(point);
-                coor = dom_document.createElement("coordinates");
-                point.appendChild(coor);
-                coor.appendChild(dom_document.createTextNode(pointsString[i]));
-            }
-
-        }
-        else
-        {
-            point = dom_document.createElement("Point");
-            placemark.appendChild(point);
-            coor = dom_document.createElement("coordinates");
-            point.appendChild(coor);
-            coor.appendChild(dom_document.createTextNode(element.getLocation().y() + "," + element.getLocation().x()));
-        }
+        pointForElement(element, placemark);
     }
 
+
+    /**
+     * Add point of element to the placemark
+     */
+    private static void pointForElement(GameElement element, Element placemark)
+    {
+        Element point;
+        Element coor;
+        point = dom_document.createElement("Point");
+        placemark.appendChild(point);
+        coor = dom_document.createElement("coordinates");
+        point.appendChild(coor);
+        coor.appendChild(dom_document.createTextNode(element.getLocation().y() + "," + element.getLocation().x()));
+    }
+
+    /**
+     * Get the point from the path.
+     *
+     * @return Points as a string
+     */
     private static String getPointsInPath(PacMan element, String split)
     {
         StringBuilder PointsString = new StringBuilder();
-        Iterator<secondsPoint3D> points = element.getPath().getPathList().iterator();
-
         secondsPoint3D p;
+        Iterator<secondsPoint3D> points = element.getPath().getPathList().iterator();
         while (points.hasNext())
         {
             p = points.next();
@@ -203,23 +194,10 @@ public final class WriteToKML
         return PointsString.toString();
     }
 
-    private static String getTime(PacMan element, String split)
-    {
-        StringBuilder PointsString = new StringBuilder();
-        Iterator<secondsPoint3D> points = element.getPath().getPathList().iterator();
-
-        secondsPoint3D p;
-        while (points.hasNext())
-        {
-            p = points.next();
-            PointsString.append(p.getSeconds());
-            PointsString.append(split);
-        }
-        return PointsString.toString();
-    }
-
-
-    private static void BuildXMLHeader()
+    /**
+     * Build KML header.
+     */
+    private static void BuildKMLHeader()
     {
         Element header, header_doc, header_name;
         header = dom_document.createElement("kml");
@@ -236,7 +214,9 @@ public final class WriteToKML
         xml_element.appendChild(header_name);
     }
 
-
+    /**
+     * Build the style for the placemark
+     */
     private static void style(String name_of_color, String icon_src, Element header_style_element)
     {
         Element style, icon_look, icon, url;
@@ -252,6 +232,12 @@ public final class WriteToKML
         icon.appendChild(url);
     }
 
+    /**
+     * Build color using object type.
+     *
+     * @param type Object type
+     * @return String representing color type
+     */
     private static String iconByType(String type)
     {
         if (type.equals("P"))
@@ -266,7 +252,11 @@ public final class WriteToKML
         }
     }
 
-
+    /**
+     * Build KML file from the document object.
+     *
+     * @throws TransformerException
+     */
     private static void output() throws TransformerException
     {
         TransformerFactory tranFacory = TransformerFactory.newInstance();
@@ -274,13 +264,32 @@ public final class WriteToKML
         DOMSource src = new DOMSource(dom_document);
         aTransformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
         aTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        StreamResult result = null;
+        StreamResult result;
         // Use passed name as the new name.
         String fileName = "pacman_" + getDateName() + ".kml";
-        result = new StreamResult(new File(fileName));
+        result = new StreamResult(new File("./FilesOut/KML", fileName));
         aTransformer.transform(src, result);
     }
 
+    /**
+     * Helper function to color path.
+     *
+     * @return Color as string
+     */
+    private static String getColorString(PacMan element)
+    {
+        Color colorbypath = element.getPath().getColor();
+        int r = colorbypath.getRed();
+        int g = colorbypath.getGreen();
+        int b = colorbypath.getBlue();
+        return String.format("#ff%02x%02x%02x", r, g, b);
+    }
+
+    /**
+     * Helper function used for naming the file.
+     *
+     * @return time as string
+     */
     private static String getDateName()
     {
         Calendar whole_date;

@@ -137,6 +137,13 @@ public final class MyCoords
         return false;
     }
 
+    /**
+     * Calculate the mid point between two points using the provided ratio
+     * @param relative ratio
+     * @param point1 first gps point
+     * @param point2 second gps point
+     * @return middle point
+     */
     public static Point3D midGPS(double relative, Point3D point1, Point3D point2)
     {
         Point3D vector = vector3D(point1, point2);

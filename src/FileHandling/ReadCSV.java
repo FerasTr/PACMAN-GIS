@@ -12,7 +12,7 @@ import GameObjects.GameElement;
 import GameObjects.PacMan;
 
 /**
- * Static class used for reading one CSV file, returns GameObjects layer object.
+ * Static class used for reading one CSV file, returns Game object.
  */
 final public class ReadCSV
 {
