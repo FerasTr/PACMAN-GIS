@@ -146,8 +146,11 @@ public final class WriteToKML
             int r = colorbypath.getRed();
             int g = colorbypath.getGreen();
             int b = colorbypath.getBlue();
-            String hex = String.format("#%02x%02x%02x", r, g, b);
+            String hex = String.format("#ff%02x%02x%02x", r, g, b);
             color.appendChild(dom_document.createTextNode(hex));
+            Element width = dom_document.createElement("width");
+            width.appendChild(dom_document.createTextNode("5"));
+            LineStyle.appendChild(width);
 
         }
 

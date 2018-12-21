@@ -77,7 +77,8 @@
 </LineString>
 <Style>
 <LineStyle>
-<color>#141a62</color>
+<color>#ff7bfee1</color>
+<width>5</width>
 </LineStyle>
 </Style>
 </Placemark>
@@ -120,7 +121,8 @@
 </LineString>
 <Style>
 <LineStyle>
-<color>#509670</color>
+<color>#ff15612a</color>
+<width>5</width>
 </LineStyle>
 </Style>
 </Placemark>
@@ -202,7 +204,8 @@
 </LineString>
 <Style>
 <LineStyle>
-<color>#477948</color>
+<color>#ff3dcc63</color>
+<width>5</width>
 </LineStyle>
 </Style>
 </Placemark>
