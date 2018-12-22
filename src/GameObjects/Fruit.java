@@ -47,6 +47,7 @@ public class Fruit implements GameElement
     {
         this.location = new Point3D(n.getLocation());
         this.weight = n.getWeight();
+        this.ID = n.getId();
     }
 
     public static void resetCounter() {

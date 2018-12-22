@@ -12,6 +12,9 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * Playground for the map and game objects.
+ */
 public class PlayGroundBoard extends JPanel
 {
     private BufferedImage myImage = null;
@@ -24,7 +27,9 @@ public class PlayGroundBoard extends JPanel
     MouseListener pacmanMouse;
     MouseListener fruitMouse;
 
-
+    /**
+     * cConstruct from game and map.
+     */
     public PlayGroundBoard(Map playground)
     {
         m = playground;
@@ -34,10 +39,13 @@ public class PlayGroundBoard extends JPanel
         imgH = this.myImage.getHeight();
     }
 
+    /**
+     * Load game.
+     */
     public void loadGame(Game g)
     {
-        this.removeMouseListener(fruitMouse);
-        this.removeMouseListener(pacmanMouse);
+        System.out.println("Loading game");
+        ClearListener();
         gameSettings = g;
         repaint();
     }
@@ -47,14 +55,26 @@ public class PlayGroundBoard extends JPanel
         return gameSettings;
     }
 
+    /**
+     * Clear game.
+     */
     public void clearBoard()
     {
-        this.removeMouseListener(fruitMouse);
-        this.removeMouseListener(pacmanMouse);
+        System.out.println("Clearing game");
+        ClearListener();
         gameSettings.resetGame();
         repaint();
     }
 
+    private void ClearListener()
+    {
+        this.removeMouseListener(fruitMouse);
+        this.removeMouseListener(pacmanMouse);
+    }
+
+    /**
+     * Scaling the point to the required size before the resize.
+     */
     public Point3D pointBeforeResize(Point3D p)
     {
         paneW = this.getWidth();
@@ -64,6 +84,9 @@ public class PlayGroundBoard extends JPanel
         return new Point3D(x, y, 0);
     }
 
+    /**
+     * Scaling the point after the resize.
+     */
     public Point3D pointAfterResize(Point3D p)
     {
         paneW = this.getWidth();
@@ -73,11 +96,12 @@ public class PlayGroundBoard extends JPanel
         return new Point3D(x, y, 0);
     }
 
+    /**
+     * Paint the game and all its elements.
+     */
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
-
-
         g.drawImage(myImage, 0, 0, this.getWidth(), this.getHeight(), this);
 
         if (gameSettings != null)
@@ -91,8 +115,8 @@ public class PlayGroundBoard extends JPanel
                 locationInPixel = pointAfterResize(locationInPixel);
                 BufferedImage icon = object.getIcon();
                 icon = rescaleIcon(icon);
-                g.drawImage(icon, (int) locationInPixel.x() - (icon.getWidth() / 2), (int) locationInPixel.y() - (icon.getHeight() / 2), this);
-
+                g.drawImage(icon, (int) locationInPixel.x() - (icon.getWidth() / 2),
+                        (int) locationInPixel.y() - (icon.getHeight() / 2), this);
             }
         }
 
@@ -104,7 +128,6 @@ public class PlayGroundBoard extends JPanel
         {
             p = itr.next();
 
-
             if (p.getPath() != null && !p.getPath().getPathList().isEmpty())
             {
                 updateLines(g, p);
@@ -112,6 +135,9 @@ public class PlayGroundBoard extends JPanel
         }
     }
 
+    /**
+     * Update the lines of each path
+     */
     private void updateLines(Graphics g, PacMan p)
     {
         Graphics2D twoG = (Graphics2D) g;
@@ -136,6 +162,9 @@ public class PlayGroundBoard extends JPanel
         }
     }
 
+    /**
+     * Rescale each icon
+     */
     private BufferedImage rescaleIcon(BufferedImage icon)
     {
         double dx = this.getWidth() / 1433.0;
@@ -155,10 +184,12 @@ public class PlayGroundBoard extends JPanel
 
     }
 
+    /**
+     * Add pacman to the screen.
+     */
     public void addPacman()
     {
-        this.removeMouseListener(fruitMouse);
-        this.removeMouseListener(pacmanMouse);
+        ClearListener();
         if (gameSettings == null)
         {
             gameSettings = new Game();
@@ -206,8 +237,7 @@ public class PlayGroundBoard extends JPanel
 
     public void addFruit()
     {
-        this.removeMouseListener(fruitMouse);
-        this.removeMouseListener(pacmanMouse);
+        ClearListener();
         if (gameSettings == null)
         {
             gameSettings = new Game();
@@ -253,14 +283,15 @@ public class PlayGroundBoard extends JPanel
         this.addMouseListener(fruitMouse);
     }
 
+    /**
+     * Run the game on a new thread real time.
+     */
     public void runGame()
     {
-        /*ShortestPathAlgo.algorithm(gameSettings);
-        repaint();*/
         simulateRun();
     }
 
-    public void simulateRun()
+    private void simulateRun()
     {
         RealTime simulation = new RealTime(this);
         Thread thread = new Thread(simulation);

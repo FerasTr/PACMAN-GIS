@@ -3,6 +3,9 @@ package GameObjects;
 import Coords.MyCoords;
 import Geom.Point3D;
 
+/**
+ * Range class to build the map borders.
+ */
 public class Range
 {
     Point3D top_left;
@@ -87,7 +90,8 @@ public class Range
         return MyCoords.midGPS(relative, top_right, bot_right);
     }
 
-    public double getPixelGPSDelta(Point3D pointInPixel){
+    public double getPixelGPSDelta(Point3D pointInPixel)
+    {
         return top_left.x() - pointInPixel.x();
     }
 }

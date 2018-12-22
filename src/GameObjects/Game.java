@@ -1,5 +1,6 @@
 package GameObjects;
 
+import FileHandling.Csv2kml;
 import FileHandling.ReadCSV;
 import FileHandling.WriteCSV;
 
@@ -14,6 +15,7 @@ public class Game
     private ArrayList<GameElement> objects;
     private double timeForGame = 0;
     private double longestTime = -1;
+    private boolean played = false;
 
     public Game()
     {
@@ -56,7 +58,6 @@ public class Game
                 this.add(new Fruit((Fruit) n));
             }
         }
-
         this.timeForGame = game.timeForGame;
         this.longestTime = game.longestTime;
     }
@@ -67,6 +68,11 @@ public class Game
     public void saveToCSV()
     {
         WriteCSV.WriteToCSV(this);
+    }
+
+    public void saveToKML()
+    {
+        Csv2kml.toKML(this);
     }
 
     public void setTimeForGame(double timeForGame)
@@ -238,5 +244,15 @@ public class Game
         {
             pac.resetToStart();
         }
+    }
+
+    public boolean isPlayed()
+    {
+        return played;
+    }
+
+    public void setPlayed(boolean played)
+    {
+        this.played = played;
     }
 }

@@ -5,7 +5,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-
+/**
+ * This class is used for choosing the playground.
+ */
 final public class MapInit
 {
     private MapInit()

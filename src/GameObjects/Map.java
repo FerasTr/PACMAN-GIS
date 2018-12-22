@@ -6,11 +6,17 @@ import Geom.Point3D;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * Map class, this is the playground of the game.
+ */
 public class Map
 {
     private BufferedImage map_path;
     private Range mapRange;
 
+    /**
+     * Map constructor, uses range class for calculations
+     */
     public Map(BufferedImage base, Range mapRange)
     {
         map_path = base;
@@ -18,6 +24,17 @@ public class Map
 
     }
 
+    /**
+     * Return the map
+     */
+    public BufferedImage getMapPath()
+    {
+        return map_path;
+    }
+
+    /**
+     * Translate a pixel to real world coordinates.
+     */
     public Point3D pixleToGPS(Point3D pixelPoint)
     {
         double realW = pixelPoint.x() / map_path.getWidth();
@@ -33,6 +50,9 @@ public class Map
         return new Point3D(x, y, 0);
     }
 
+    /**
+     * Translate a gps point to a pixel on the map.
+     */
     public Point3D gpsToPixle(Point3D gpsPoint)
     {
         double deltaX = mapRange.getDeltaX();
@@ -50,15 +70,13 @@ public class Map
         return new Point3D(lat, lon, 0);
     }
 
+    /**
+     * Distance between two pixels on the map.
+     */
     public double distBetweenPixles(Point3D pixle1, Point3D pixle2)
     {
         Point3D pixle1ToGPS = pixleToGPS(pixle1);
         Point3D pixle2ToGPS = pixleToGPS(pixle2);
         return MyCoords.distance3d(pixle1ToGPS, pixle2ToGPS);
-    }
-
-    public BufferedImage getMapPath()
-    {
-        return map_path;
     }
 }
