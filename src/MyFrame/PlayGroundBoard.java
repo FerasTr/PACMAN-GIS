@@ -1,8 +1,8 @@
 package MyFrame;
 
-import Algorithms.ShortestPathAlgo;
 import GameObjects.*;
 import Geom.Point3D;
+import Geom.secondsPoint3D;
 
 import javax.swing.*;
 import java.awt.*;

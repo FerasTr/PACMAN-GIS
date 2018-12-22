@@ -7,27 +7,31 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-
+/**
+ * Fruit is the object of the game
+ */
 public class Fruit implements GameElement
 {
     private static int ID = -1;
-
     private Point3D location;
     private double weight;
 
     boolean NotEaten = true; // true not eaten, false eaten
 
-    // For manual
+    /**
+     * Manual constructor.
+     */
     public Fruit(double lat, double lon, double alt, double weight)
     {
         String location_string = "(" + lat + "," + lon + "," + alt + ")";
         this.location = new Point3D(location_string);
         ID++;
-
         this.weight = weight;
     }
 
-    // For csv
+    /**
+     * String constructor
+     */
     public Fruit(String id, String lat, String lon, String alt, String weight)
     {
         String location_string = "(" + lat + "," + lon + "," + alt + ")";
@@ -36,10 +40,17 @@ public class Fruit implements GameElement
         this.weight = Double.parseDouble(weight);
     }
 
+    /**
+     * Copy constructor.
+     */
     public Fruit(Fruit n)
     {
         this.location = new Point3D(n.getLocation());
         this.weight = n.getWeight();
+    }
+
+    public static void resetCounter() {
+        ID = -1;
     }
 
     @Override

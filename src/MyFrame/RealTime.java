@@ -1,14 +1,11 @@
 package MyFrame;
 
 import Algorithms.ShortestPathAlgo;
-import Coords.MyCoords;
 import GameObjects.Game;
 import GameObjects.PacMan;
-import GameObjects.secondsPoint3D;
+import Geom.secondsPoint3D;
 import Geom.Point3D;
 
-import javax.swing.*;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 public class RealTime implements Runnable

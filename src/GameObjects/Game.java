@@ -6,6 +6,9 @@ import FileHandling.WriteCSV;
 import java.io.File;
 import java.util.*;
 
+/**
+ * Game object, holds player and target objects.
+ */
 public class Game
 {
     private ArrayList<GameElement> objects;
@@ -14,22 +17,31 @@ public class Game
 
     public Game()
     {
-        objects = new ArrayList<GameElement>();
+        objects = new ArrayList<>();
     }
 
+    /**
+     * Build a game from a csv file name.
+     */
     public Game(String csv_file)
     {
         objects = ReadCSV.parsing(csv_file);
     }
 
+    /**
+     * Build a game from a csv file.
+     */
     public Game(File csv_file)
     {
         objects = ReadCSV.parsing(csv_file.getAbsolutePath());
     }
 
+    /**
+     * Copy constructor.
+     */
     public Game(Game game)
     {
-        this.objects = new ArrayList<GameElement>();
+        this.objects = new ArrayList<>();
         Iterator<GameElement> itr = game.iterator();
         while (itr.hasNext())
         {
@@ -49,6 +61,14 @@ public class Game
         this.longestTime = game.longestTime;
     }
 
+    /**
+     * Save game to a CSV file.
+     */
+    public void saveToCSV()
+    {
+        WriteCSV.WriteToCSV(this);
+    }
+
     public void setTimeForGame(double timeForGame)
     {
         this.timeForGame = timeForGame;
@@ -62,13 +82,19 @@ public class Game
     public void updateLongestTime()
     {
         longestTime = Integer.MIN_VALUE;
+        PacMan toPrint = null;
         for (PacMan p : listPacman())
         {
             double time = p.getPathTime();
             if (time > longestTime)
             {
                 longestTime = time;
+                toPrint = p;
             }
+        }
+        if (toPrint != null)
+        {
+            System.out.println("The path with the longest time is by pacman " + toPrint.getId() + " and it is " + longestTime + " seconds.");
         }
     }
 
@@ -77,9 +103,14 @@ public class Game
         return longestTime;
     }
 
-    public void saveToCSV()
+    public void updateTimeForGame(double seconds)
     {
-        WriteCSV.WriteToCSV(this);
+        timeForGame += seconds;
+    }
+
+    public double getTimeForGame()
+    {
+        return timeForGame;
     }
 
     public Iterator<GameElement> iterator()
@@ -172,15 +203,6 @@ public class Game
         return toPrint;
     }
 
-    public void updateTimeForGame(double seconds)
-    {
-        timeForGame += seconds;
-    }
-
-    public double getTimeForGame()
-    {
-        return timeForGame;
-    }
 
     public void resetPaths()
     {
@@ -194,11 +216,21 @@ public class Game
         }
     }
 
+    /**
+     * Reset game.
+     */
     public void resetGame()
     {
         objects.clear();
+        timeForGame = 0;
+        longestTime = -1;
+        Fruit.resetCounter();
+        PacMan.resetCounter();
     }
 
+    /**
+     * Reset players to the starting position.
+     */
     public void resetPacPost()
     {
         ArrayList<PacMan> pacs = listPacman();

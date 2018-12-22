@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.TimeZone;
 
+import Geom.secondsPoint3D;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

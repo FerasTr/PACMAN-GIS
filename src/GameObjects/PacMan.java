@@ -19,7 +19,9 @@ public class PacMan implements GameElement
 
     private Path path;
 
-
+    /**
+     * Manual constructor.
+     */
     public PacMan(double lat, double lon, double alt, double speed, double radius)
     {
         String location_string = "(" + lat + "," + lon + "," + alt + ")";
@@ -31,7 +33,9 @@ public class PacMan implements GameElement
         this.radius = radius;
         path = new Path(ID);
     }
-
+    /**
+     * String constructor
+     */
     public PacMan(String id, String lat, String lon, String alt, String speed, String radius)
     {
         String location_string = "(" + lat + "," + lon + "," + alt + ")";
@@ -43,7 +47,9 @@ public class PacMan implements GameElement
         this.radius = Double.parseDouble(radius);
         path = new Path(ID);
     }
-
+    /**
+     * Copy constructor.
+     */
     public PacMan(PacMan n)
     {
         this.location = new Point3D(n.getLocation());
@@ -154,5 +160,9 @@ public class PacMan implements GameElement
     public void resetToStart()
     {
         this.updateLocation(new Point3D(startingPos));
+    }
+
+    public static void resetCounter() {
+        ID = -1;
     }
 }

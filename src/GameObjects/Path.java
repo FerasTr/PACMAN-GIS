@@ -2,6 +2,7 @@ package GameObjects;
 
 import Coords.MyCoords;
 import Geom.Point3D;
+import Geom.secondsPoint3D;
 
 import java.awt.Color;
 import java.util.*;

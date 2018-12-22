@@ -1,6 +1,4 @@
-package GameObjects;
-
-import Geom.Point3D;
+package Geom;
 
 public class secondsPoint3D
 {
