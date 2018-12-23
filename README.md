@@ -3,7 +3,7 @@
 
  ***THIS APPLICATION WAS BUILT USING INTELLIJ IDE***
  
- *Game stats will be printed in the IDE console!*
+ ***Game stats will be printed in the IDE console!***
 
 **How to play:**
 
