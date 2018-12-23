@@ -15,7 +15,6 @@ public class Game
     private ArrayList<GameElement> objects;
     private double timeForGame = 0;
     private double longestTime = -1;
-    private boolean played = false;
 
     public Game()
     {
@@ -246,13 +245,4 @@ public class Game
         }
     }
 
-    public boolean isPlayed()
-    {
-        return played;
-    }
-
-    public void setPlayed(boolean played)
-    {
-        this.played = played;
-    }
 }

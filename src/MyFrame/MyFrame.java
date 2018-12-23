@@ -87,26 +87,17 @@ public class MyFrame extends JFrame
             public void actionPerformed(ActionEvent e)
             {
                 currentGame = bg.getGameSettings();
-                saveGameCSV(currentGame);
                 if (currentGame != null && !currentGame.listPacman().isEmpty() && !currentGame.listFruit().isEmpty())
                 {
-                    if (!currentGame.isPlayed())
-                    {
-                        Game temp = new Game(currentGame);
-                        ShortestPathAlgo.algorithm(temp);
-                        temp.saveToKML();
-                    }
-                    else
-                    {
-                        currentGame.saveToKML();
-                    }
+                    saveGameCSV();
+                    saveGameKML();
                     System.out.println("Game is saved as KML and CSV");
+
                 }
                 else
                 {
                     System.out.println("Add elements first...");
                 }
-
             }
         });
 
@@ -143,8 +134,20 @@ public class MyFrame extends JFrame
         setVisible(true);
     }
 
+    private void saveGameKML()
+    {
+        System.out.println("Saving to KML...");
+        Game toSave = new Game(currentGame);
+        toSave.resetPaths();
+        toSave.resetPacPost();
+        ShortestPathAlgo.algorithm(toSave);
+        toSave.resetPacPost();
+        toSave.saveToKML();
+    }
+
     private void runAlg()
     {
+        currentGame = bg.getGameSettings();
         if (currentGame != null && !currentGame.listPacman().isEmpty() && !currentGame.listFruit().isEmpty())
         {
             System.out.println("Running game...");
@@ -158,19 +161,12 @@ public class MyFrame extends JFrame
         bg.clearBoard();
     }
 
-    private void saveGameCSV(Game currentGame)
+    private void saveGameCSV()
     {
-        if (currentGame != null && !currentGame.listPacman().isEmpty() && !currentGame.listFruit().isEmpty())
-        {
-            System.out.println("Saving to CSV...");
-            Game toSave = new Game(currentGame);
-            toSave.resetPacPost();
-            toSave.saveToCSV();
-        }
-        else
-        {
-            System.out.println("Add elements first...");
-        }
+        System.out.println("Saving to CSV...");
+        Game toSave = new Game(currentGame);
+        toSave.resetPacPost();
+        toSave.saveToCSV();
     }
 
     private void loadGameCSV(File selectedFile)

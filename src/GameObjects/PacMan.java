@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 public class PacMan implements GameElement
 {
@@ -58,7 +59,7 @@ public class PacMan implements GameElement
         this.startingPos = new Point3D(n.startingPos);
         this.speed = n.getSpeed();
         this.radius = n.getRadius();
-        this.path = new Path (n.getPath());
+        this.path = new Path(n.getPath());
         this.ID = n.getId();
     }
 
@@ -160,7 +161,7 @@ public class PacMan implements GameElement
 
     public void restartPath()
     {
-        this.path = new Path(ID);
+        this.path.getPathList().clear();
     }
 
     public void resetToStart()

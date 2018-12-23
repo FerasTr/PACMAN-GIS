@@ -206,8 +206,8 @@ public final class WriteToKML
         dom_document.appendChild(header);
         header_doc = dom_document.createElement("Document");
         header.appendChild(header_doc);
-        style("pacman", "./Resources/icons/pacman.png", header_doc);
-        style("fruit", "./Resources/icons/fruit.png", header_doc);
+        style("pacman", "https://i.imgur.com/61917e1.png", header_doc);
+        style("fruit", "https://i.imgur.com/fkuoimy.png", header_doc);
         xml_element = dom_document.createElement("Folder");
         header_doc.appendChild(xml_element);
         header_name = dom_document.createElement("name");
