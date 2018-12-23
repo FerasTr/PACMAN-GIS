@@ -47,7 +47,10 @@ final public class ShortestPathAlgo
         while (itr.hasNext())
         {
             Fruit currentTarget = itr.next();
-
+            if(!currentTarget.isNotEaten())
+            {
+                continue;
+            }
             PacMan close = fastestToEat(currentTarget, players);
             double timeToEatClose = calcTimeToEat(close, currentTarget.getLocation());
             for (PacMan canidate : players)
