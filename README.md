@@ -1,8 +1,8 @@
 # PACMAN-GIS game
 *Finding the fastest path for each pacman on a real world map.*+
 
-## ***THIS APPLICATION WAS BUILT USING INTELLIJ IDE***
-## *Game stats will be printed in the IDE console!*
+ ***THIS APPLICATION WAS BUILT USING INTELLIJ IDE***
+ *Game stats will be printed in the IDE console!*
 
 **How to play:**
 
