@@ -36,6 +36,9 @@ final public class ShortestPathAlgo
         return close;
     }
 
+    /**
+     * Main alg, calc close pacman then eat fruit
+     */
     public static void algorithm(Game game)
     {
         ArrayList<Fruit> targets = game.listFruit();

@@ -6,6 +6,6 @@ public class Driver
 
     public static void main(String[] args)
     {
-        MyFrame asd = new MyFrame(MapInit.ArielMap());
+        MyFrame gui = new MyFrame(MapInit.ArielMap());
     }
 }
