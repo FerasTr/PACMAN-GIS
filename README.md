@@ -1,5 +1,5 @@
 # PACMAN-GIS game
-*Finding the fastest path for each pacman on a real world map.*+
+*Finding the fastest path for each pacman on a real world map.*
 
  ***THIS APPLICATION WAS BUILT USING INTELLIJ IDE***
  
