@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="767.0" y="814.802734375">com</node>
+    <node x="668.0" y="704.802734375">netscape</node>
+    <node x="110.49999999999996" y="499.802734375">MyFrame</node>
+    <node x="116.09999999999998" y="608.802734375">Driver</node>
+    <node x="432.0" y="888.802734375">sun</node>
+    <node x="282.0" y="704.802734375">groovyjarjarasm</node>
+    <node x="0.0" y="888.802734375">java</node>
+    <node x="465.0" y="814.802734375">javax</node>
+    <node x="327.22275132275126" y="162.802734375">Coords</node>
+    <node x="157.0" y="814.802734375">javafx</node>
+    <node x="914.0" y="814.802734375">junit</node>
+    <node x="0.0" y="814.802734375">oracle</node>
+    <node x="312.0" y="814.802734375">maps</node>
+    <node x="79.37914462081127" y="291.802734375">GameObjects</node>
+    <node x="290.0" y="888.802734375">org</node>
+    <node x="145.0" y="888.802734375">CSV</node>
+    <node x="616.0" y="814.802734375">icons</node>
+    <node x="491.0" y="704.802734375">META-INF</node>
+    <node x="573.0" y="888.802734375">jdk</node>
+    <node x="360.22275132275126" y="420.802734375">Algorithms</node>
+    <node x="839.0" y="704.802734375">groovy</node>
+    <node x="131.22275132275126" y="162.802734375">FileHandling</node>
+    <node x="30.0" y="704.802734375">groovyjarjarcommonscli</node>
+    <node x="207.20793650793644" y="13.802734375">Geom</node>
+    <node x="617.7227513227513" y="16.219401041666664">groovyjarjarantlr</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="Coords" target="Geom">
+      <point x="38.66666666666666" y="-14.5" />
+      <point x="423.8894179894179" y="122.802734375" />
+      <point x="290.45793650793644" y="122.802734375" />
+      <point x="27.75000000000003" y="14.5" />
+    </edge>
+    <edge source="Driver" target="MyFrame">
+      <point x="56.0" y="-25.5" />
+      <point x="256.09999999999997" y="588.802734375" />
+      <point x="225.7" y="588.802734375" />
+      <point x="51.200000000000045" y="14.5" />
+    </edge>
+    <edge source="Coords" target="Coords">
+      <point x="-43.5" y="14.5" />
+      <point x="341.72275132275126" y="211.802734375" />
+      <point x="307.22275132275126" y="211.802734375" />
+      <point x="307.22275132275126" y="184.552734375" />
+      <point x="-58.0" y="7.25" />
+    </edge>
+    <edge source="FileHandling" target="FileHandling">
+      <point x="-54.75" y="14.5" />
+      <point x="149.47275132275126" y="211.802734375" />
+      <point x="111.22275132275128" y="211.802734375" />
+      <point x="111.22275132275128" y="177.302734375" />
+      <point x="-73.0" y="-0.0" />
+    </edge>
+    <edge source="groovyjarjarantlr" target="groovyjarjarantlr">
+      <point x="0.0" y="14.5" />
+      <point x="701.2227513227513" y="75.21940104166666" />
+      <point x="587.7227513227513" y="75.21940104166666" />
+      <point x="587.7227513227513" y="30.719401041666664" />
+      <point x="-83.5" y="-0.0" />
+    </edge>
+    <edge source="GameObjects" target="Geom">
+      <point x="-46.875" y="-14.5" />
+      <point x="107.50414462081127" y="261.802734375" />
+      <point x="47.629144620811275" y="261.802734375" />
+      <point x="47.629144620811275" y="112.802734375" />
+      <point x="242.88650793650785" y="112.802734375" />
+      <point x="-19.821428571428584" y="14.5" />
+    </edge>
+    <edge source="MyFrame" target="Algorithms">
+      <point x="32.0" y="-14.5" />
+      <point x="206.49999999999994" y="469.802734375" />
+      <point x="428.72275132275126" y="469.802734375" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="GameObjects" target="Coords">
+      <point x="65.625" y="-14.5" />
+      <point x="220.00414462081127" y="271.802734375" />
+      <point x="399.72275132275126" y="271.802734375" />
+      <point x="14.5" y="14.5" />
+    </edge>
+    <edge source="Driver" target="GameObjects">
+      <point x="-56.0" y="-25.5" />
+      <point x="144.09999999999997" y="588.802734375" />
+      <point x="0.0" y="588.802734375" />
+      <point x="0.0" y="400.802734375" />
+      <point x="146.87914462081127" y="400.802734375" />
+      <point x="-7.5" y="14.5" />
+    </edge>
+    <edge source="MyFrame" target="Geom">
+      <point x="-53.333333333333314" y="-14.5" />
+      <point x="121.16666666666664" y="479.802734375" />
+      <point x="18.879144620811275" y="479.802734375" />
+      <point x="18.879144620811275" y="92.802734375" />
+      <point x="227.02936507936502" y="92.802734375" />
+      <point x="-35.678571428571416" y="14.5" />
+    </edge>
+    <edge source="FileHandling" target="GameObjects">
+      <point x="18.25" y="14.5" />
+      <point x="222.47275132275126" y="251.802734375" />
+      <point x="182.50414462081127" y="251.802734375" />
+      <point x="28.125" y="-14.5" />
+    </edge>
+    <edge source="FileHandling" target="Geom">
+      <point x="0.0" y="-14.5" />
+      <point x="204.22275132275126" y="142.802734375" />
+      <point x="266.67222222222216" y="142.802734375" />
+      <point x="3.9642857142857224" y="14.5" />
+    </edge>
+    <edge source="Algorithms" target="GameObjects">
+      <point x="-27.400000000000006" y="-14.5" />
+      <point x="401.3227513227513" y="390.802734375" />
+      <point x="221.87914462081127" y="390.802734375" />
+      <point x="67.5" y="14.5" />
+    </edge>
+    <edge source="Algorithms" target="Geom">
+      <point x="27.400000000000006" y="-14.5" />
+      <point x="456.12275132275124" y="400.802734375" />
+      <point x="471.25846560846554" y="400.802734375" />
+      <point x="471.25846560846554" y="112.802734375" />
+      <point x="298.3865079365079" y="112.802734375" />
+      <point x="35.678571428571445" y="14.5" />
+    </edge>
+    <edge source="GameObjects" target="GameObjects">
+      <point x="-52.5" y="14.5" />
+      <point x="101.87914462081127" y="350.802734375" />
+      <point x="49.379144620811275" y="350.802734375" />
+      <point x="49.379144620811275" y="309.927734375" />
+      <point x="-75.0" y="3.625" />
+    </edge>
+    <edge source="Geom" target="Geom">
+      <point x="-43.607142857142854" y="14.5" />
+      <point x="219.10079365079358" y="72.802734375" />
+      <point x="177.20793650793644" y="72.802734375" />
+      <point x="177.20793650793644" y="21.052734375" />
+      <point x="-55.5" y="-7.25" />
+    </edge>
+    <edge source="groovyjarjarcommonscli" target="groovyjarjarcommonscli">
+      <point x="-51.75" y="14.5" />
+      <point x="81.75" y="753.802734375" />
+      <point x="10.0" y="753.802734375" />
+      <point x="10.0" y="726.552734375" />
+      <point x="-103.5" y="7.25" />
+    </edge>
+    <edge source="GameObjects" target="FileHandling">
+      <point x="9.375" y="-14.5" />
+      <point x="163.75414462081127" y="241.802734375" />
+      <point x="185.97275132275126" y="241.802734375" />
+      <point x="-18.25" y="14.5" />
+    </edge>
+    <edge source="MyFrame" target="GameObjects">
+      <point x="10.666666666666686" y="-14.5" />
+      <point x="185.16666666666663" y="479.802734375" />
+      <point x="190.47275132275126" y="479.802734375" />
+      <point x="190.47275132275126" y="400.802734375" />
+      <point x="191.87914462081127" y="400.802734375" />
+      <point x="37.5" y="14.5" />
+    </edge>
+    <edge source="MyFrame" target="MyFrame">
+      <point x="-25.60000000000001" y="14.5" />
+      <point x="148.89999999999995" y="558.802734375" />
+      <point x="80.49999999999994" y="558.802734375" />
+      <point x="80.49999999999994" y="514.302734375" />
+      <point x="-64.0" y="-0.0" />
+    </edge>
+    <edge source="Algorithms" target="Coords">
+      <point x="0.0" y="-14.5" />
+      <point x="43.5" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.5000000000000001" x="-20.0" y="437.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
